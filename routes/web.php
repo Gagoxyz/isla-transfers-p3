@@ -42,7 +42,15 @@ Route::get('/panel/customer', [CustomerController::class, 'panel'])
     ->middleware('viajero.auth')
     ->name('customer.panel');
 
-Route::get('/panel/customer', [CustomerController::class, 'index'])->name('customer.panel');
+/* Rutas de cliente particular */
+Route::post('panel/customer/booking/oneway', [CustomerController::class, 'storeOneWay'])->name('booking.oneWay'); // añade reserva ida
+Route::put('panel/customer/booking/update-one-way', [CustomerController::class, 'updateOneWay'])->name('booking.updateOneWay'); // actualiza reserva ida
+Route::delete('/booking/destroy/{id_reserva}', [CustomerController::class, 'destroyOneWay'])->name('booking.destroyOneWay'); // elimina reserva ida
+
+Route::post('panel/customer/booking/return', [CustomerController::class, 'storeReturn'])->name('booking.return'); // añade reserva vuelta
+
+Route::post('panel/customer/booking/roundtrip', [CustomerController::class, 'storeRoundTrip'])->name('booking.roundTrip'); // añade reserva ida-vuelta
+Route::get('/panel/customer', [CustomerController::class, 'showBookingsByEmail'])->name('customer.panel');
 
 Route::get('/panel/admin', function () {
     return view('panel.admin');

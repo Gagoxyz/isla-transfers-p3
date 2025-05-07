@@ -32,4 +32,9 @@ class TransferViajero extends Authenticatable
     protected $hidden = [
         'password', // Nunca exponer la contraseña
     ];
+
+    public function bookings()
+    {
+        return $this->hasMany(TransferReserva::class, 'email_cliente', 'email');
+    }
 }

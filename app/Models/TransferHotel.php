@@ -33,7 +33,7 @@ class TransferHotel extends Authenticatable
     //     return $this->email_admin; // Permite usar Auth::user()->email
     // }
 
-    public function transferReserva() {
-        return $this->hasMany(TransferReserva::class);
-    }
+    // public function transferReserva() {
+    //     return $this->hasMany(TransferReserva::class);
+    // }
 }

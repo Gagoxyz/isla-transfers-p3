@@ -40,24 +40,16 @@ class TransferReserva extends Model
     ];
 
     // Definir las relaciones de Eloquent
-
     public function destinoHotel()
     {
         return $this->belongsTo(TransferHotel::class, 'id_destino', 'id_hotel');
     }
 
-    public function tipoReserva()
-    {
-        return $this->belongsTo(TipoReserva::class, 'id_tipo_reserva', 'id_tipo_reserva');
+    public function descripcionVehiculo(){
+        return $this->belongsTo(TransferVehiculo::class, 'id_vehiculo');
     }
 
-    public function vehiculo()
-    {
-        return $this->belongsTo(Vehiculo::class, 'id_vehiculo', 'id_vehiculo');
-    }
-
-    public function destino()
-    {
-        return $this->belongsTo(Hotel::class, 'id_destino', 'id_hotel'); // Aquí se asume que `id_destino` también hace referencia a un hotel
+    public function realizadaPor(){
+        return $this->belongsTo(TransferTipoReserva::class, 'id_tipo_reserva');
     }
 }

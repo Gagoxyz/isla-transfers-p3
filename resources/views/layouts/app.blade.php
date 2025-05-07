@@ -6,7 +6,7 @@
     <title>@yield('title', 'Isla Transfers')</title>
 
     <!-- Estilos -->
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <!-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> -->
 
     <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -14,11 +14,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Favicon -->
-    <link rel="stylesheet" href="/css/app.css">
+
 </head>
 
 <body>
+<!-- <style>
+    body {
+        background-image: url('/images/background_transfer.webp');
+        background-size: cover;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+    .glass-card {
+        background-color: rgba(33, 37, 41, 0.75); /* bg-dark + opacity */
+        border-radius: 1rem;
+        padding: 2rem;
+        color: white;
+        box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    }
+
+    .glass-btn {
+        border-radius: 50px;
+        padding: 0.75rem 1.5rem;
+        font-weight: bold;
+    }
+</style> -->
     {{-- Navbar --}}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
