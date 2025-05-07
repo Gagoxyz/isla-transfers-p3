@@ -67,16 +67,15 @@ Route::get('/', function () {
 Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
 
-//Rutas para el calendario
+//Rutas para el calendario 
 Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
 Route::get('/admin', function () {
     return view('panel.admin');
 })->name('admin.panel');
 
 
-
-
-
+Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
+Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
 
 
 // Get para verificar conexión con BBDD de MySQL

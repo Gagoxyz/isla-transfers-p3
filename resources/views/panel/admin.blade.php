@@ -26,9 +26,9 @@
 </div>
 <!-- Modales -->
 @include('modals.one_way_admin')
-{{-- @include('modals.return_admin') --}}
-{{-- @include('modals.round_trip_admin') --}}
-{{-- @include('modals.select_reservation_type') --}}
+@include('modals.return_admin')
+@include('modals.round_trip_admin')
+{{-- @include('modals.select_reservation_type') --}}S
 {{-- @include('modals.edit_admin') --}}
 @endsection
 
