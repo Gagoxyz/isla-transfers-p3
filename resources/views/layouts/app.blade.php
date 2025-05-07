@@ -14,8 +14,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <!-- Favicon -->
-    <link rel="stylesheet" href="/css/app.css">
 </head>
 
 <body>
@@ -29,7 +27,6 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
-
                     {{-- Menú según tipo de sesión --}}
                     @if (session('id_admin'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.panel') }}">Panel de control</a></li>
@@ -41,7 +38,6 @@
                     @elseif (session('id_hotel'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('corp.panel') }}">Panel de control</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Lista de reservas</a></li>
-                        <!-- Agregar más funcionalidades específicas de los hoteles aquí -->
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('welcome') }}">Panel de control</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registro</a></li>
@@ -65,7 +61,6 @@
                             </ul>
                         </li>
                     @endif
-
                 </ul>
             </div>
         </div>
@@ -78,5 +73,9 @@
 
     {{-- Scripts de Bootstrap --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{-- Scripts adicionales (como FullCalendar, etc.) --}}
+    @stack('scripts')
 </body>
 </html>
+ 

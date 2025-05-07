@@ -60,4 +60,5 @@ class TransferReserva extends Model
     {
         return $this->belongsTo(Hotel::class, 'id_destino', 'id_hotel'); // Aquí se asume que `id_destino` también hace referencia a un hotel
     }
+    
 }

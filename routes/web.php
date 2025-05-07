@@ -6,6 +6,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\AdminReservaController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -64,6 +66,13 @@ Route::get('/', function () {
 // Ruta para el editar los diferentes perfiles
 Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
 Route::post('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
+
+//Rutas para el calendario
+Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
+Route::get('/admin', function () {
+    return view('panel.admin');
+})->name('admin.panel');
+
 
 
 
