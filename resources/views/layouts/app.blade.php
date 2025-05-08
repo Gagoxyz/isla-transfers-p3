@@ -53,8 +53,8 @@
                     {{-- Menú según tipo de sesión --}}
                     @if (session('id_admin'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.panel') }}">Panel de control</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Lista de reservas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Gestión de hoteles</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.reservas.list') }}">Lista de reservas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.hoteles.index') }}">Gestión de hoteles</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">Gestión de vehículos</a></li>
                     @elseif (session('id_viajero'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('customer.panel') }}">Panel de control</a></li>

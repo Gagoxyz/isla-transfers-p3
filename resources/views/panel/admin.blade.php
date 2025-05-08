@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'Bienvenido')
-
+@include('modals.edit_admin')
 @section('content')
 <div class="container py-3 mt-5">
     <h1 class="pb-5 row justify-content-center">Panel de administración ADMIN</h1>
@@ -93,6 +93,7 @@
             .then(response => response.json())
             .then(reserva => {
                 $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                $('#deleteReservationForm').attr('action', `/admin/reserva/${reservaId}`);
                 $('#reservaId').val(reserva.id_reserva);
                 $('#tipoReservaEdit').val(reserva.id_tipo_reserva);
 

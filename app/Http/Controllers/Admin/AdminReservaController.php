@@ -141,11 +141,30 @@ public function update(Request $request, $id)
         $data['hora_vuelo_salida'] = $request->timeFly;
         $data['hora_recogida_salida'] = $request->pickupTime;
     }
+    $data['fecha_modificacion'] = now();
+    $reserva->update($data);
+
 
     $reserva->update($data);
 
     return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
 }
+
+
+public function destroy($id)
+{
+    $reserva = TransferReserva::findOrFail($id);
+    $reserva->delete();
+
+    return redirect()->route('admin.panel')->with('success', 'Reserva eliminada correctamente.');
+}
+public function list()
+{
+    $reservas = TransferReserva::orderBy('fecha_reserva', 'desc')->get();
+    return view('panel.admin_list', compact('reservas'));
+}
+
+
 
 
 

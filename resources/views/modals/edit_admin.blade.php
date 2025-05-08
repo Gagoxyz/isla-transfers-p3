@@ -2,11 +2,13 @@
 <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
+
+      <!-- Formulario de edición -->
       <form id="editReservationForm" method="POST">
         @csrf
         @method('PUT')
         <input type="hidden" name="reservaId" id="reservaId">
-        <input type="hidden" name="tipoReserva" id="tipoReservaEdit"> <!-- Añadido -->
+        <input type="hidden" name="tipoReserva" id="tipoReservaEdit">
 
         <div class="modal-header">
           <h5 class="modal-title" id="editModalLabel">Editar reserva</h5>
@@ -37,31 +39,31 @@
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6 campo-entrada">
+          <div class="row mb-3 campo-entrada">
+            <div class="col-md-6">
               <label for="flyNumerEdit" class="form-label">Número de vuelo</label>
               <input type="text" name="flyNumer" id="flyNumerEdit" class="form-control">
             </div>
-            <div class="col-md-6 campo-entrada">
+            <div class="col-md-6">
               <label for="originAirportEdit" class="form-label">Aeropuerto de origen</label>
               <input type="text" name="originAirport" id="originAirportEdit" class="form-control">
             </div>
           </div>
 
           <!-- Salida -->
-          <div class="row mb-3">
-            <div class="col-md-6 campo-salida">
+          <div class="row mb-3 campo-salida">
+            <div class="col-md-6">
               <label for="dateFlyEdit" class="form-label">Fecha vuelo salida</label>
               <input type="date" name="dateFly" id="dateFlyEdit" class="form-control">
             </div>
-            <div class="col-md-6 campo-salida">
+            <div class="col-md-6">
               <label for="timeFlyEdit" class="form-label">Hora vuelo salida</label>
               <input type="time" name="timeFly" id="timeFlyEdit" class="form-control">
             </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="col-md-6 campo-salida">
+          <div class="row mb-3 campo-salida">
+            <div class="col-md-6">
               <label for="pickupTimeEdit" class="form-label">Hora de recogida</label>
               <input type="time" name="pickupTime" id="pickupTimeEdit" class="form-control">
             </div>
@@ -92,11 +94,23 @@
           </div>
         </div>
 
-        <div class="modal-footer">
+        <div class="modal-footer d-flex justify-content-between">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-primary">Guardar cambios</button>
+          </div>
         </div>
       </form>
+
+      <!-- Formulario de eliminación (fuera del anterior) -->
+      <form id="deleteReservationForm" method="POST" class="text-end px-4 pb-3">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro que quieres eliminar esta reserva?')">
+          Eliminar reserva
+        </button>
+      </form>
+
     </div>
   </div>
 </div>

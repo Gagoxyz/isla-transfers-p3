@@ -7,6 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReservaController;
+use App\Http\Controllers\HotelController;
 
 
 /*
@@ -86,6 +87,16 @@ Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeRetu
 Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
 Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
 Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->name('admin.reserva.update');
+Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
+Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
+
+Route::prefix('admin/hoteles')->middleware('is_admin')->group(function () {
+    Route::get('/', [HotelController::class, 'index'])->name('admin.hoteles.index');
+    Route::post('/', [HotelController::class, 'store'])->name('admin.hoteles.store');
+    Route::put('/{id}', [HotelController::class, 'update'])->name('admin.hoteles.update');
+    Route::delete('/{id}', [HotelController::class, 'destroy'])->name('admin.hoteles.destroy');
+});
+
 
 
 
