@@ -1,13 +1,13 @@
 @php
     use Illuminate\Support\Str;
-    use App\Models\Hotel;
-    use App\Models\Vehiculo;
+    use App\Models\TransferHotel;
+    use App\Models\TransferVehiculo;
     use App\Models\TransferViajero;
 
     $newUUID = Str::upper(Str::random(7));
     $emails = TransferViajero::pluck('email');
-    $hoteles = Hotel::all();
-    $vehiculos = Vehiculo::all();
+    $hoteles = TransferHotel::all();
+    $vehiculos = TransferVehiculo::all();
 @endphp
 
 <!-- Modal -->

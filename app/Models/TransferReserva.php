@@ -52,5 +52,11 @@ class TransferReserva extends Model
     public function realizadaPor(){
         return $this->belongsTo(TransferTipoReserva::class, 'id_tipo_reserva');
     }
+
+    public function vehiculo()
+    {
+        return $this->belongsTo(TransferVehiculo::class, 'id_vehiculo', 'id_vehiculo');
+    }
+
     
 }

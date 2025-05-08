@@ -10,12 +10,18 @@ class ReservaController extends Controller
     public function index()
     {
         $reservas = TransferReserva::with(['vehiculo', 'destinoHotel'])->get();
-
         $formateadas = [];
 
         foreach ($reservas as $reserva) {
+            // Detectar tipo de trayecto: 1 = ida, 2 = vuelta, 3 = ida y vuelta
+            $tipo_trayecto = 3;
+            if ($reserva->fecha_entrada && !$reserva->fecha_vuelo_salida) {
+                $tipo_trayecto = 1;
+            } elseif (!$reserva->fecha_entrada && $reserva->fecha_vuelo_salida) {
+                $tipo_trayecto = 2;
+            }
+
             $baseTitle = "{$reserva->localizador} - {$reserva->destinoHotel->nombre_hotel} - {$reserva->email_cliente}";
-            $commonInfo = "Localizador: {$reserva->localizador}\nCliente: {$reserva->email_cliente}\nHotel: {$reserva->destinoHotel->nombre_hotel}\nPasajeros: {$reserva->num_viajeros}";
 
             if ($reserva->fecha_entrada) {
                 $formateadas[] = [
@@ -23,6 +29,9 @@ class ReservaController extends Controller
                     'title' => $baseTitle . ' (IDA)',
                     'start' => $reserva->fecha_entrada . 'T' . ($reserva->hora_entrada ?? '00:00:00'),
                     'color' => $reserva->fecha_vuelo_salida ? '#28a745' : '#007bff',
+                    'extendedProps' => [
+                        'tipo_trayecto' => $tipo_trayecto,
+                    ],
                 ];
             }
 
@@ -32,6 +41,9 @@ class ReservaController extends Controller
                     'title' => $baseTitle . ' (VUELTA)',
                     'start' => $reserva->fecha_vuelo_salida . 'T' . ($reserva->hora_vuelo_salida ?? '00:00:00'),
                     'color' => $reserva->fecha_entrada ? '#28a745' : '#dc3545',
+                    'extendedProps' => [
+                        'tipo_trayecto' => $tipo_trayecto,
+                    ],
                 ];
             }
         }

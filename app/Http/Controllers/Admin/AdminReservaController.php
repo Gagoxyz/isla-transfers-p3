@@ -101,8 +101,20 @@ public function storeRoundTrip(Request $request)
     return redirect()->route('admin.panel')->with('success', 'Reserva de ida y vuelta creada correctamente.');
 }
 
+public function show($id)
+{
+    $reserva = \App\Models\TransferReserva::findOrFail($id);
+    return response()->json($reserva);
+}
 
+public function update(Request $request, $id)
+{
+    $reserva = \App\Models\TransferReserva::findOrFail($id);
 
+    $reserva->update($request->all()); // puedes usar $request->validate([...]) si prefieres
+
+    return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
+}
 
 
 }

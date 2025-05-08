@@ -28,8 +28,8 @@
 @include('modals.one_way_admin')
 @include('modals.return_admin')
 @include('modals.round_trip_admin')
-{{-- @include('modals.select_reservation_type') --}}S
-{{-- @include('modals.edit_admin') --}}
+{{-- @include('modals.select_reservation_type') --}}
+@include('modals.edit_admin')
 @endsection
 
 @push('scripts')
@@ -37,6 +37,8 @@
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales-all.global.min.js'></script>
+<!-- jQuery (requerido para los modales y selects dinámicos) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -57,6 +59,7 @@
                 day: 'día'
             },
             events: '/api/reservas',
+            eventDisplay: 'list-item',
             eventDidMount: function(info) {
                 if (info.event.extendedProps && info.event.extendedProps.tooltip) {
                     info.el.setAttribute('title', info.event.extendedProps.tooltip);
@@ -68,10 +71,52 @@
                 console.log('Fecha seleccionada:', formattedDate);
             },
             eventClick: function(info) {
-                const reservaId = info.event.extendedProps.id_reserva;
-                console.log('Reserva clicada ID:', reservaId);
+            // Extrae el ID numérico (antes del guión)
+            const rawId = info.event.id;
+            const reservaId = rawId.split('-')[0];
+
+            const tipoReserva = info.event.extendedProps.tipo_trayecto;;
+
+            console.log("Tipo reserva:", tipoReserva);
+
+            // Mostrar/ocultar campos según el tipo
+            if (tipoReserva == 1) {
+                $('.campo-entrada').show();
+                $('.campo-salida').hide();
+            } else if (tipoReserva == 2) {
+                $('.campo-entrada').hide();
+                $('.campo-salida').show();
+            } else {
+                $('.campo-entrada').show();
+                $('.campo-salida').show();
             }
-        });
+
+            fetch(`/admin/reserva/${reservaId}`)
+                .then(response => response.json())
+                .then(reserva => {
+                    console.log("Tipo reserva:", reserva.id_tipo_reserva);
+                    console.log("Campo salida:", $('.campo-salida').length);
+                    $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                    $('#reservaId').val(reserva.id);
+                    $('#uuidEdit').val(reserva.localizador);
+                    $('#customerEmailEdit').val(reserva.email_cliente);
+                    $('#bookingDateEdit').val(reserva.fecha_entrada);
+                    $('#bookingTimeEdit').val(reserva.hora_entrada);
+                    $('#flyNumerEdit').val(reserva.numero_vuelo_entrada);
+                    $('#originAirportEdit').val(reserva.origen_vuelo_entrada);
+                    $('#dateFlyEdit').val(reserva.fecha_vuelo_salida);
+                    $('#timeFlyEdit').val(reserva.hora_vuelo_salida);
+                    $('#pickupTimeEdit').val(reserva.hora_recogida_salida);
+                    $('#passengerNumEdit').val(reserva.num_viajeros);
+                    $('#hotelSelectEdit').val(reserva.id_destino);
+                    $('#carSelectEdit').val(reserva.id_vehiculo);
+
+                    $('#editModal').modal('show');
+                });
+        }
+
+
+             });
 
         calendar.render();
     });

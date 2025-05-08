@@ -84,6 +84,10 @@ Route::get('/admin', function () {
 
 Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
 Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
+Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
+Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->name('admin.reserva.update');
+
+
 
 
 // Get para verificar conexión con BBDD de MySQL
