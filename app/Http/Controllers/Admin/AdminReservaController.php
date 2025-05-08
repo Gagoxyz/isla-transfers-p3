@@ -110,11 +110,43 @@ public function show($id)
 public function update(Request $request, $id)
 {
     $reserva = \App\Models\TransferReserva::findOrFail($id);
+    $tipo = $request->input('tipoReserva');
 
-    $reserva->update($request->all()); // puedes usar $request->validate([...]) si prefieres
+    $request->validate([
+        'uuid' => 'required|string|max:255',
+        'customerEmailSelect' => 'required|email',
+        'hotelSelect' => 'nullable|integer',
+        'carSelect' => 'nullable|integer',
+        'passengerNum' => 'nullable|integer|min:1',
+    ]);
+
+    $data = [
+        'localizador' => $request->uuid,
+        'email_cliente' => $request->customerEmailSelect,
+        'id_destino' => $request->hotelSelect,
+        'id_vehiculo' => $request->carSelect,
+        'num_viajeros' => $request->passengerNum,
+    ];
+
+    if (($tipo == 1 || $tipo == 3) && $request->filled('bookingDate')) {
+        $data['fecha_entrada'] = $request->bookingDate;
+        $data['hora_entrada'] = $request->bookingTime;
+        $data['numero_vuelo_entrada'] = $request->flyNumer;
+        $data['origen_vuelo_entrada'] = $request->originAirport;
+    }
+    
+
+    if ($tipo == 2 || $tipo == 3) {
+        $data['fecha_vuelo_salida'] = $request->dateFly;
+        $data['hora_vuelo_salida'] = $request->timeFly;
+        $data['hora_recogida_salida'] = $request->pickupTime;
+    }
+
+    $reserva->update($data);
 
     return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
 }
+
 
 
 }

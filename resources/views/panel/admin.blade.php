@@ -75,9 +75,7 @@
             const rawId = info.event.id;
             const reservaId = rawId.split('-')[0];
 
-            const tipoReserva = info.event.extendedProps.tipo_trayecto;;
-
-            console.log("Tipo reserva:", tipoReserva);
+            const tipoReserva = info.event.extendedProps.tipo_trayecto;
 
             // Mostrar/ocultar campos según el tipo
             if (tipoReserva == 1) {
@@ -92,27 +90,34 @@
             }
 
             fetch(`/admin/reserva/${reservaId}`)
-                .then(response => response.json())
-                .then(reserva => {
-                    console.log("Tipo reserva:", reserva.id_tipo_reserva);
-                    console.log("Campo salida:", $('.campo-salida').length);
-                    $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
-                    $('#reservaId').val(reserva.id);
-                    $('#uuidEdit').val(reserva.localizador);
-                    $('#customerEmailEdit').val(reserva.email_cliente);
-                    $('#bookingDateEdit').val(reserva.fecha_entrada);
-                    $('#bookingTimeEdit').val(reserva.hora_entrada);
-                    $('#flyNumerEdit').val(reserva.numero_vuelo_entrada);
-                    $('#originAirportEdit').val(reserva.origen_vuelo_entrada);
-                    $('#dateFlyEdit').val(reserva.fecha_vuelo_salida);
-                    $('#timeFlyEdit').val(reserva.hora_vuelo_salida);
-                    $('#pickupTimeEdit').val(reserva.hora_recogida_salida);
-                    $('#passengerNumEdit').val(reserva.num_viajeros);
-                    $('#hotelSelectEdit').val(reserva.id_destino);
-                    $('#carSelectEdit').val(reserva.id_vehiculo);
+            .then(response => response.json())
+            .then(reserva => {
+                $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                $('#reservaId').val(reserva.id_reserva);
+                $('#tipoReservaEdit').val(reserva.id_tipo_reserva);
 
-                    $('#editModal').modal('show');
-                });
+                // Datos comunes
+                $('#uuidEdit').val(reserva.localizador ?? '');
+                $('#customerEmailEdit').val(reserva.email_cliente ?? '');
+                $('#passengerNumEdit').val(reserva.num_viajeros ?? '');
+                $('#hotelSelectEdit').val(reserva.id_destino ?? '');
+                $('#carSelectEdit').val(reserva.id_vehiculo ?? '');
+
+                // Entrada (Aeropuerto -> Hotel)
+                $('#bookingDateEdit').val(reserva.fecha_entrada ? reserva.fecha_entrada.substring(0, 10) : '');
+                $('#bookingTimeEdit').val(reserva.hora_entrada ? reserva.hora_entrada.substring(0, 5) : '');
+                $('#flyNumerEdit').val(reserva.numero_vuelo_entrada ?? '');
+                $('#originAirportEdit').val(reserva.origen_vuelo_entrada ?? '');
+
+                // Salida (Hotel -> Aeropuerto)
+                $('#dateFlyEdit').val(reserva.fecha_vuelo_salida ? reserva.fecha_vuelo_salida.substring(0, 10) : '');
+                $('#timeFlyEdit').val(reserva.hora_vuelo_salida ? reserva.hora_vuelo_salida.substring(0, 5) : '');
+                $('#pickupTimeEdit').val(reserva.hora_recogida_salida ? reserva.hora_recogida_salida.substring(0, 5) : '');
+
+                $('#editModal').modal('show');
+            });
+
+
         }
 
 

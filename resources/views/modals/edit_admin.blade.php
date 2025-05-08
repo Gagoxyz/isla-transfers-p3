@@ -5,14 +5,15 @@
       <form id="editReservationForm" method="POST">
         @csrf
         @method('PUT')
+        <input type="hidden" name="reservaId" id="reservaId">
+        <input type="hidden" name="tipoReserva" id="tipoReservaEdit"> <!-- Añadido -->
+
         <div class="modal-header">
           <h5 class="modal-title" id="editModalLabel">Editar reserva</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
+
         <div class="modal-body">
-
-          <input type="hidden" name="reservaId" id="reservaId">
-
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="uuidEdit" class="form-label">Localizador</label>
@@ -89,8 +90,8 @@
               </select>
             </div>
           </div>
-
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
           <button type="submit" class="btn btn-primary">Guardar cambios</button>
