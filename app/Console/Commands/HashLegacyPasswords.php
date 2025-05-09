@@ -18,6 +18,9 @@ class HashLegacyPasswords extends Command
         // Tabla transfer_admin
         $this->hashTable('transfer_admin', 'id_admin', 'password');
 
+        // Tabla transfer_vehiculo
+        $this->hashTable('transfer_vehiculo', 'id_vehiculo', 'password');
+
         // Tabla transfer_viajeros (solo IDs específicos)
         DB::table('transfer_viajeros')
             ->whereIn('id_viajero', [1, 2, 3, 4, 5])

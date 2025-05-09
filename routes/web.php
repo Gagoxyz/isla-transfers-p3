@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReservaController;
 use App\Http\Controllers\Admin\AdminHotelController;
+use App\Http\Controllers\Admin\AdminCarController;
 
 
 /*
@@ -99,6 +100,12 @@ Route::get('/admin/gestion-hoteles', [AdminHotelController::class, 'index'])->na
 Route::post('/admin/hotel', [AdminHotelController::class, 'store'])->name('admin.hotel.store'); // añade un hotel
 Route::put('/admin/hotel/{id}', [AdminHotelController::class, 'update'])->name('admin.hotel.update'); // modifica un hotel
 Route::delete('/admin/hotel/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotel.destroy'); // elimina un hotel
+
+Route::get('/admin/gestion-vehiculos', [AdminCarController::class, 'index'])->name('admin.vehiculos.index'); // panel gestion de vehiculos
+Route::post('/admin/vehiculo', [AdminCarController::class, 'store'])->name('admin.vehiculos.store'); // añade un vehiculo
+Route::put('/admin/vehiculo/{id}', [AdminCarController::class, 'update'])->name('admin.vehiculos.update'); // modifica un vehiculo
+Route::delete('/admin/vehiculo/{id}', [AdminCarController::class, 'destroy'])->name('admin.vehiculos.destroy'); // elimina un vehiculo
+
 
 
 

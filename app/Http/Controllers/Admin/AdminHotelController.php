@@ -8,7 +8,6 @@ use App\Models\TransferHotel;
 use App\Models\TransferZona;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Database\QueryException;
 
 class AdminHotelController extends Controller
 {
