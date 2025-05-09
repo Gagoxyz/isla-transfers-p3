@@ -5,16 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\TransferReserva;
-use Illuminate\Support\Facades\Session;
 
 class AdminReservaController extends Controller
 {
     //Añadir desde el panel admin una reserva de solo ida
     public function storeOneWay(Request $request)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $request->validate([
             'uuid' => 'required|string|max:255',
             'bookingDate' => 'required|date',
@@ -45,9 +41,6 @@ class AdminReservaController extends Controller
 
     public function storeReturn(Request $request)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $request->validate([
             'uuid' => 'required|string|max:255',
             'dateFly' => 'required|date',
@@ -76,9 +69,6 @@ class AdminReservaController extends Controller
 
     public function storeRoundTrip(Request $request)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $request->validate([
             'uuid' => 'required|string|max:255',
             'bookingDate' => 'required|date',
@@ -115,18 +105,12 @@ class AdminReservaController extends Controller
 
     public function show($id)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $reserva = \App\Models\TransferReserva::findOrFail($id);
         return response()->json($reserva);
     }
 
     public function update(Request $request, $id)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $reserva = \App\Models\TransferReserva::findOrFail($id);
         $tipo = $request->input('tipoReserva');
 
@@ -171,9 +155,6 @@ class AdminReservaController extends Controller
 
     public function destroy($id)
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $reserva = TransferReserva::findOrFail($id);
         $reserva->delete();
 
@@ -181,9 +162,6 @@ class AdminReservaController extends Controller
     }
     public function list()
     {
-        if (!Session::has('id_admin')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         $reservas = TransferReserva::orderBy('fecha_reserva', 'desc')->get();
         return view('panel.admin_list', compact('reservas'));
     }

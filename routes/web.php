@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReservaController;
 use App\Http\Controllers\Admin\AdminHotelController;
 use App\Http\Controllers\Admin\AdminCarController;
+use App\Http\Controllers\Hotel\HotelController;
 
 
 /*
@@ -58,11 +59,11 @@ Route::get('/panel/admin', function () {
 })->name('admin.panel');
 
 //Rutas para el calendario 
-Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
 Route::get('/admin', function () {
     return view('panel.admin');
 })->name('admin.panel');
 
+Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
 Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
 Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
 Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
@@ -104,11 +105,11 @@ Route::get('/panel/customer', [CustomerController::class, 'showBookingsByEmail']
 
 
 // HOTEL
-Route::get('/panel/hotel', function () {
-    return view('panel.hotel.corporative');
-})->name('corp.panel');
+Route::get('/panel/hotel', [HotelController::class, 'index'])->name('corp.panel'); // función inicial para obtener diferentes datos
 
-
+Route::post('/hotel/reserva/oneway', [HotelController::class, 'storeOneWay'])->name('hotel.reserva.oneway'); // añade reserva ida
+Route::post('/hotel/reserva/return', [HotelController::class, 'storeReturn'])->name('hotel.reserva.return'); // añade reserva vuelta
+Route::post('/hotel/reserva/roundtrip', [HotelController::class, 'storeRoundTrip'])->name('hotel.reserva.roundtrip'); // añade reserva ida-vuelta
 
 
 

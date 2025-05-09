@@ -13,19 +13,12 @@ class CustomerController extends Controller
 {
     public function panel()
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
         return view('panel.customer');
     }
 
     // muestra las reservas filtrando por el email de la Session
     public function showBookingsByEmail()
     {
-        if (!Session::has('id_viajer')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-
         $oneWayBookings = $this->getOneWayBookings();
         $returnBookings = $this->getReturnBookings();
         $roundTripBookings = $this->getRoundTripBookings();
@@ -39,10 +32,6 @@ class CustomerController extends Controller
     // Obtiene las reservas por email de IDA
     public function getOneWayBookings()
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $email = Session('email');
 
         return TransferReserva::with(['destinoHotel', 'descripcionVehiculo', 'realizadaPor'])->where('email_cliente', $email)->whereNull('fecha_vuelo_salida')->get();
@@ -51,10 +40,6 @@ class CustomerController extends Controller
     // Añade una reserva de IDA
     public function storeOneWay(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'uuid' => 'required|string|max:100',
             'id_hotel' => 'required|integer',
@@ -103,10 +88,6 @@ class CustomerController extends Controller
     // Modifica una reserva de IDA
     public function updateOneWay(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'id_reserva' => 'required|integer|exists:transfer_reservas,id_reserva',
             'edit_fecha_entrada' => 'required|date',
@@ -151,10 +132,6 @@ class CustomerController extends Controller
     // Elimina una reserva de IDA
     public function destroyOneWay($id_reserva)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         try {
             $reserva = TransferReserva::findOrFail($id_reserva);
 
@@ -179,10 +156,6 @@ class CustomerController extends Controller
     // Obtiene las reservas por email de VUELTA
     public function getReturnBookings()
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $email = Session('email');
 
         return TransferReserva::with(['destinoHotel', 'descripcionVehiculo', 'realizadaPor'])->where('email_cliente', $email)->whereNull('fecha_entrada')->get();
@@ -191,10 +164,6 @@ class CustomerController extends Controller
     // Añade una reserva de VUELTA
     public function storeReturn(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'ruuid' => 'required|string|max:100',
             'rid_hotel' => 'required|integer',
@@ -243,10 +212,6 @@ class CustomerController extends Controller
     // Modifica una reserva de VUELTA
     public function updateReturn(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'id_reserva' => 'required|integer|exists:transfer_reservas,id_reserva',
             'editReturn_fecha_salida' => 'required|date',
@@ -289,10 +254,6 @@ class CustomerController extends Controller
     // Elimina una reserva de VUELTA
     public function destroyReturn($id_reserva)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         try {
             $reserva = TransferReserva::findOrFail($id_reserva);
 
@@ -317,10 +278,6 @@ class CustomerController extends Controller
     // Obtiene las reservas por email de IDA-VUELTA
     public function getRoundTripBookings()
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $email = Session('email');
 
         return TransferReserva::with(['destinoHotel', 'descripcionVehiculo', 'realizadaPor'])->where('email_cliente', $email)->whereNotNull('fecha_entrada')->whereNotNull('fecha_vuelo_salida')->get();
@@ -329,10 +286,6 @@ class CustomerController extends Controller
     // Añade una reserva de IDA-VUELTA
     public function storeRoundTrip(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'rtuuid' => 'required|string|max:100',
             'rtid_hotel' => 'required|integer',
@@ -389,10 +342,6 @@ class CustomerController extends Controller
     // Modifica una reserva IDA-VUELTA
     public function updateRoundTrip(Request $request)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         $request->validate([
             'id_reserva' => 'required|integer|exists:transfer_reservas,id_reserva',
             'editRoundTrip_fecha_entrada' => 'required|date',
@@ -443,10 +392,6 @@ class CustomerController extends Controller
     // Elimina una reserva IDA-VUELTA
     public function destroyRoundTrip($id_reserva)
     {
-        if (!Session::has('id_viajero')) {
-            return redirect()->route('login')->withErrors('Acceso no autorizado');
-        }
-        
         try {
             $reserva = TransferReserva::findOrFail($id_reserva);
 

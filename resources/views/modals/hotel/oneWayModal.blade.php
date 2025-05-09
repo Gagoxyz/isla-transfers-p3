@@ -1,6 +1,10 @@
 @php
 use Illuminate\Support\Str;
 $uuid = Str::random(7);
+use App\Models\TransferVehiculo;
+use App\Models\TransferViajero;
+$emails = TransferViajero::pluck('email');
+$vehiculos = TransferVehiculo::all();
 @endphp
 <!-- Modal -->
 <div class="modal fade" id="hotelOneWayModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
@@ -11,69 +15,59 @@ $uuid = Str::random(7);
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="{{ route('admin.reserva.oneway') }}" method="POST">
+                <form action="{{ route('hotel.reserva.oneway') }}" method="POST">
                     @csrf
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="uuid" class="form-label">Localizador</label>
-                            <input type="text" value="{{ $uuid }}" name="uuid" class="form-control" readonly>
+                            <label for="hotelUUID" class="form-label">Localizador</label>
+                            <input type="text" value="{{ $uuid }}" name="hotelUUID" class="form-control" readonly>
                         </div>
                         <div class="col-md-6">
-                            <label for="customerEmail" class="form-label">Email del cliente</label>
-                            <select class="form-select" name="customerEmailSelect" id="customerEmailSelect">
+                            <label for="hotelCustomerEmail" class="form-label">Email del cliente</label>
+                            <select class="form-select" name="hotelCustomerEmail" id="hotelCustomerEmail">
                                 <option selected>Seleccionar...</option>
                                 @foreach($emails as $email)
-                                    <option value="{{ $email }}">{{ $email }}</option>
+                                <option value="{{ $email }}">{{ $email }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="bookingDate" class="form-label">Día de llegada</label>
-                            <input type="date" name="bookingDate" id="bookingDate" class="form-control" required>
+                            <label for="hotel_fecha_entrada" class="form-label">Día de llegada</label>
+                            <input type="date" name="hotel_fecha_entrada" id="hotel_fecha_entrada" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="bookingTime" class="form-label">Hora de llegada</label>
-                            <input type="time" name="bookingTime" id="bookingTime" class="form-control" required>
-                        </div>
-                    </div>
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="flyNumer" class="form-label">Número de vuelo</label>
-                            <input type="text" name="flyNumer" id="flyNumer" class="form-control" required>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="originAirport" class="form-label">Aeropuerto de origen</label>
-                            <input type="text" name="originAirport" id="originAirport" class="form-control" required>
+                            <label for="hotel_hora_entrada" class="form-label">Hora de llegada</label>
+                            <input type="time" name="hotel_hora_entrada" id="hotel_hora_entrada" class="form-control" required>
                         </div>
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-6">
-                            <label for="hotelSelect" class="form-label">Hotel de destino</label>
-                            <select class="form-select" name="hotelSelect" id="hotelSelect">
-                                <option selected>Selecionar...</option>
-                                @foreach($hoteles as $hotel)
-                                    <option value="{{ $hotel->id_hotel }}">{{ $hotel->nombre_hotel }}</option>
-                                @endforeach
-                            </select>
+                            <label for="hotel_numero_vuelo_entrada" class="form-label">Número de vuelo</label>
+                            <input type="text" name="hotel_numero_vuelo_entrada" id="hotel_numero_vuelo_entrada" class="form-control" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="carSelect" class="form-label">Vehículo</label>
-                            <select class="form-select" name="carSelect" id="carSelect">
+                            <label for="hotel_origen_vuelo_entrada" class="form-label">Aeropuerto de origen</label>
+                            <input type="text" name="hotel_origen_vuelo_entrada" id="hotel_origen_vuelo_entrada" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="hotel_vehiculo" class="form-label">Vehículo</label>
+                            <select class="form-select" name="hotel_vehiculo" id="hotel_vehiculo">
                                 <option selected>Selecionar...</option>
                                 @foreach($vehiculos as $vehiculo)
-                                    <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
+                                <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-                    <div class="row mb-4">
                         <div class="col-md-6">
-                            <label for="passengerNum" class="form-label">Número de pasajeros</label>
-                            <input type="number" name="passengerNum" id="passengerNum" class="form-control" required min="1">
+                            <label for="hotel_num_viajeros" class="form-label">Número de pasajeros</label>
+                            <input type="number" name="hotel_num_viajeros" id="hotel_num_viajeros" class="form-control" required min="1">
                         </div>
                     </div>
+
                     <div class="d-flex justify-content-end">
                         <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cerrar</button>
                         <button type="submit" class="btn btn-primary">
