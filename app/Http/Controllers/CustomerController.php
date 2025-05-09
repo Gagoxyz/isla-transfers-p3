@@ -84,7 +84,7 @@ class CustomerController extends Controller
         }
     }
 
-    // Actualiza una reserva de IDA
+    // Modifica una reserva de IDA
     public function updateOneWay(Request $request)
     {
         $request->validate([
@@ -101,7 +101,7 @@ class CustomerController extends Controller
         $reserva = TransferReserva::find($request->id_reserva);
 
         try {
-            $entrada = DateTime::createFromFormat('Y-m-d H:i:s', $request->edit_fecha_entrada . ' ' . $request->edit_hora_entrada);
+            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->edit_fecha_entrada . ' ' . $request->edit_hora_entrada);
             $ahora = new DateTime();
 
             $diff = $ahora->diff($entrada);
@@ -133,19 +133,19 @@ class CustomerController extends Controller
     {
         try {
             $reserva = TransferReserva::findOrFail($id_reserva);
-    
+
             $entrada = DateTime::createFromFormat('Y-m-d H:i:s', $reserva->fecha_entrada . ' ' . $reserva->hora_entrada);
             $ahora = new DateTime();
-    
+
             $diff = $ahora->diff($entrada);
             $horasDiff = ($diff->days * 24) + $diff->h + ($diff->i / 60);
-    
+
             if ($horasDiff < 48) {
                 return redirect()->back()->with('error', 'No se puede eliminar una reserva dentro de las 48 horas previas a la entrada.');
             }
 
             $reserva->delete();
-    
+
             return redirect()->back()->with('success', 'Reserva eliminada correctamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al eliminar la reserva: ' . $e->getMessage());
@@ -175,7 +175,7 @@ class CustomerController extends Controller
 
         try {
             // Combina fecha y hora de recogida de salida (es la prestación real del servicio)
-            $salida = DateTime::createFromFormat('Y-m-d H:i', $request->fecha_vuelo_salida . ' ' . $request->hora_recogida_salida);
+            $salida = DateTime::createFromFormat('Y-m-d H:i', $request->rfecha_vuelo_salida . ' ' . $request->rhora_vuelo_salida);
             $ahora = new DateTime();
 
             if (!$salida) {
@@ -208,6 +208,72 @@ class CustomerController extends Controller
         }
     }
 
+    // Modifica una reserva de VUELTA
+    public function updateReturn(Request $request)
+    {
+        $request->validate([
+            'id_reserva' => 'required|integer|exists:transfer_reservas,id_reserva',
+            'editReturn_fecha_salida' => 'required|date',
+            'editReturn_hora_salida' => 'required',
+            'editReturn_hora_recogida_salida' => 'required',
+            'editReturn_num_viajeros' => 'required|integer|min:1',
+            'editReturn_id_vehiculo' => 'required|integer',
+            'editReturn_id_hotel' => 'required|integer',
+        ]);
+
+        $reserva = TransferReserva::find($request->id_reserva);
+
+        try {
+            $salida = DateTime::createFromFormat('Y-m-d H:i', $request->editReturn_fecha_salida . ' ' . $request->editReturn_hora_salida);
+            $ahora = new DateTime();
+
+            $diff = $ahora->diff($salida);
+            $horasDiff = ($diff->days * 24) + $diff->h + ($diff->i / 60);
+
+            if ($salida < $ahora || $horasDiff < 48) {
+                return redirect()->back()->with('error', 'Las modificaciones deben hacerse con al menos 48 horas de antelación.');
+            }
+
+            $reserva->update([
+                'fecha_modificacion' => now(),
+                'fecha_vuelo_salida' => $request->editReturn_fecha_salida,
+                'hora_vuelo_salida' => $request->editReturn_hora_salida,
+                'hora_recogida_salida' => $request->editReturn_hora_recogida_salida,
+                'num_viajeros' => $request->editReturn_num_viajeros,
+                'id_vehiculo' => $request->editReturn_id_vehiculo,
+                'id_destino' => $request->editReturn_id_hotel,
+            ]);
+
+            return redirect()->back()->with('success', 'Reserva de vuelta actualizada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al actualizar la reserva: ' . $e->getMessage());
+        }
+    }
+
+    // Elimina una reserva de VUELTA
+    public function destroyReturn($id_reserva)
+    {
+        try {
+            $reserva = TransferReserva::findOrFail($id_reserva);
+
+            $salida = DateTime::createFromFormat('Y-m-d H:i:s', $reserva->fecha_vuelo_salida . ' ' . $reserva->hora_vuelo_salida);
+            $ahora = new DateTime();
+
+            $diff = $ahora->diff($salida);
+            $horasDiff = ($diff->days * 24) + $diff->h + ($diff->i / 60);
+
+            if ($horasDiff < 48) {
+                return redirect()->back()->with('error', 'No se puede eliminar una reserva dentro de las 48 horas previas a la salida.');
+            }
+
+            $reserva->delete();
+
+            return redirect()->back()->with('success', 'Reserva eliminada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al eliminar la reserva: ' . $e->getMessage());
+        }
+    }
+
     // Obtiene las reservas por email de IDA-VUELTA
     public function getRoundTripBookings()
     {
@@ -235,7 +301,7 @@ class CustomerController extends Controller
 
         try {
             // Combinar fecha y hora de entrada (inicio del servicio)
-            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->fecha_entrada . ' ' . $request->hora_entrada);
+            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->rtfecha_entrada . ' ' . $request->rthora_entrada);
             $ahora = new DateTime();
 
             if (!$entrada) {
@@ -269,6 +335,80 @@ class CustomerController extends Controller
             return redirect()->back()->with('success', 'Reserva de ida-vuelta registrada correctamente.');
         } catch (\Exception $e) {
             return redirect()->back()->with('error', 'Error al procesar la reserva: ' . $e->getMessage());
+        }
+    }
+
+    // Modifica una reserva IDA-VUELTA
+    public function updateRoundTrip(Request $request)
+    {
+        $request->validate([
+            'id_reserva' => 'required|integer|exists:transfer_reservas,id_reserva',
+            'editRoundTrip_fecha_entrada' => 'required|date',
+            'editRoundTrip_hora_entrada' => 'required',
+            'editRoundTrip_numero_vuelo_entrada' => 'required|string|max:50',
+            'editRoundTrip_origen_vuelo_entrada' => 'required|string|max:50',
+            'editRoundTrip_fecha_vuelo_salida' => 'required|date',
+            'editRoundTrip_hora_vuelo_salida' => 'required',
+            'editRoundTrip_hora_recogida_salida' => 'required',
+            'editRoundTrip_num_viajeros' => 'required|integer|min:1',
+            'editRoundTrip_id_vehiculo' => 'required|integer',
+            'editRoundTrip_id_hotel' => 'required|integer',
+        ]);
+
+        $reserva = TransferReserva::find($request->id_reserva);
+
+        try {
+            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->editRoundTrip_fecha_entrada . ' ' . $request->editRoundTrip_hora_entrada);
+            $ahora = new DateTime();
+
+            $diff = $ahora->diff($entrada);
+            $horasDiff = ($diff->days * 24) + $diff->h + ($diff->i / 60);
+
+            if ($entrada < $ahora || $horasDiff < 48) {
+                return redirect()->back()->with('error', 'Las modificaciones deben hacerse con al menos 48 horas de antelación.');
+            }
+
+            $reserva->update([
+                'fecha_modificacion' => now(),
+                'fecha_entrada' => $request->editRoundTrip_fecha_entrada,
+                'hora_entrada' => $request->editRoundTrip_hora_entrada,
+                'numero_vuelo_entrada' => $request->editRoundTrip_numero_vuelo_entrada,
+                'origen_vuelo_entrada' => $request->editRoundTrip_origen_vuelo_entrada,
+                'fecha_vuelo_salida' => $request->editRoundTrip_fecha_vuelo_salida,
+                'hora_vuelo_salida' => $request->editRoundTrip_hora_vuelo_salida,
+                'hora_recogida_salida' => $request->editRoundTrip_hora_recogida_salida,
+                'num_viajeros' => $request->editRoundTrip_num_viajeros,
+                'id_vehiculo' => $request->editRoundTrip_id_vehiculo,
+                'id_destino' => $request->editRoundTrip_id_hotel,
+            ]);
+
+            return redirect()->back()->with('success', 'Reserva de ida-vuelta actualizada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al actualizar la reserva: ' . $e->getMessage());
+        }
+    }
+
+    // Elimina una reserva IDA-VUELTA
+    public function destroyRoundTrip($id_reserva)
+    {
+        try {
+            $reserva = TransferReserva::findOrFail($id_reserva);
+
+            $entrada = DateTime::createFromFormat('Y-m-d H:i:s', $reserva->fecha_entrada . ' ' . $reserva->hora_entrada);
+            $ahora = new DateTime();
+
+            $diff = $ahora->diff($entrada);
+            $horasDiff = ($diff->days * 24) + $diff->h + ($diff->i / 60);
+
+            if ($horasDiff < 48) {
+                return redirect()->back()->with('error', 'No se puede eliminar una reserva dentro de las 48 horas previas a la entrada.');
+            }
+
+            $reserva->delete();
+
+            return redirect()->back()->with('success', 'Reserva eliminada correctamente.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error al eliminar la reserva: ' . $e->getMessage());
         }
     }
 }

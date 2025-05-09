@@ -29,6 +29,15 @@
                     </thead>
                     <tbody>
                         @foreach($reservas as $reserva)
+                        @php
+                            // Detectar tipo de trayecto como en el API
+                            $tipo_trayecto = 3;
+                            if ($reserva->fecha_entrada && !$reserva->fecha_vuelo_salida) {
+                                $tipo_trayecto = 1;
+                            } elseif (!$reserva->fecha_entrada && $reserva->fecha_vuelo_salida) {
+                                $tipo_trayecto = 2;
+                            }
+                        @endphp
                         <tr>
                             <td>{{ $reserva->localizador }}</td>
                             <td>{{ $reserva->email_cliente }}</td>
@@ -38,7 +47,7 @@
                                 <div class="d-flex gap-2">
                                     <button class="btn btn-sm btn-warning editAdminBtn"
                                         data-id="{{ $reserva->id_reserva }}"
-                                        data-tipo="{{ $reserva->id_tipo_reserva }}">
+                                        data-tipo="{{ $tipo_trayecto }}">
                                         <i class="fa-solid fa-pen-to-square me-1"></i>Editar
                                     </button>
 
@@ -70,23 +79,27 @@
 $(document).ready(function () {
     $('.editAdminBtn').on('click', function () {
         const id = $(this).data('id');
-        const tipo = $(this).data('tipo');
+        const tipo = parseInt($(this).data('tipo'));
+
+        console.log('ID de reserva:', id);
+        console.log('Tipo (desde botón):', tipo);
 
         // Mostrar/ocultar campos según tipo
-        if (tipo == 1) {
-            $('.campo-entrada').show();
-            $('.campo-salida').hide();
-        } else if (tipo == 2) {
-            $('.campo-entrada').hide();
-            $('.campo-salida').show();
+        if (tipo === 1) {
+            $('.campo-entrada').removeClass('d-none');
+            $('.campo-salida').addClass('d-none');
+        } else if (tipo === 2) {
+            $('.campo-entrada').addClass('d-none');
+            $('.campo-salida').removeClass('d-none');
         } else {
-            $('.campo-entrada').show();
-            $('.campo-salida').show();
+            $('.campo-entrada').removeClass('d-none');
+            $('.campo-salida').removeClass('d-none');
         }
 
         fetch(`/admin/reserva/${id}`)
             .then(response => response.json())
             .then(reserva => {
+                console.log('Datos recibidos del fetch:', reserva);
                 $('#editReservationForm').attr('action', `/admin/reserva/${id}`);
                 $('#deleteReservationForm').attr('action', `/admin/reserva/${id}`);
                 $('#reservaId').val(reserva.id_reserva);

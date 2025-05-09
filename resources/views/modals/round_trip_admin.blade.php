@@ -1,13 +1,13 @@
 @php
-    use Illuminate\Support\Str;
-    use App\Models\TransferHotel;
-    use App\Models\TransferVehiculo;
-    use App\Models\TransferViajero;
+use Illuminate\Support\Str;
+use App\Models\TransferHotel;
+use App\Models\TransferVehiculo;
+use App\Models\TransferViajero;
 
-    $newUUID = Str::upper(Str::random(7));
-    $emails = TransferViajero::pluck('email');
-    $hoteles = TransferHotel::all();
-    $vehiculos = TransferVehiculo::all();
+$newUUID = Str::upper(Str::random(7));
+$emails = TransferViajero::pluck('email');
+$hoteles = TransferHotel::all();
+$vehiculos = TransferVehiculo::all();
 @endphp
 
 <!-- Modal -->
@@ -21,47 +21,51 @@
             <div class="modal-body">
                 <form action="{{ route('admin.reserva.roundtrip') }}" method="POST">
                     @csrf
-                    <input type="hidden" name="uuid" value="{{ $newUUID }}">
-                    
-                    <!-- Email cliente -->
                     <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="uuid" class="form-label">Localizador</label>
+                            <input type="text" value="{{ $newUUID }}" name="uuid" class="form-control" readonly>
+                        </div>
                         <div class="col-md-6">
                             <label for="customerEmailSelect" class="form-label">Email del cliente</label>
                             <select class="form-select" name="customerEmailSelect" id="customerEmailSelect" required>
                                 <option selected disabled>Seleccionar...</option>
                                 @foreach($emails as $email)
-                                    <option value="{{ $email }}">{{ $email }}</option>
+                                <option value="{{ $email }}">{{ $email }}</option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="bookingDate" class="form-label">Día de llegada</label>
                             <input type="date" name="bookingDate" id="bookingDate" class="form-control" required>
                         </div>
-                    </div>
-
-                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="bookingTime" class="form-label">Hora de llegada</label>
                             <input type="time" name="bookingTime" id="bookingTime" class="form-control" required>
                         </div>
-                        <div class="col-md-6">
-                            <label for="flyNumer" class="form-label">Número de vuelo</label>
-                            <input type="text" name="flyNumer" id="flyNumer" class="form-control" required>
-                        </div>
                     </div>
 
                     <div class="row mb-3">
                         <div class="col-md-6">
+                            <label for="flyNumer" class="form-label">Número de vuelo</label>
+                            <input type="text" name="flyNumer" id="flyNumer" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
                             <label for="originAirport" class="form-label">Aeropuerto de origen</label>
                             <input type="text" name="originAirport" id="originAirport" class="form-control" required>
                         </div>
+                    </div>
+
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="hotelSelect" class="form-label">Hotel de destino</label>
                             <select class="form-select" name="hotelSelect" id="hotelSelect" required>
                                 <option selected disabled>Seleccionar...</option>
                                 @foreach($hoteles as $hotel)
-                                    <option value="{{ $hotel->id_hotel }}">{{ $hotel->nombre_hotel }}</option>
+                                <option value="{{ $hotel->id_hotel }}">{{ $hotel->nombre_hotel }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -89,7 +93,7 @@
                             <select class="form-select" name="carSelect" id="carSelect" required>
                                 <option selected disabled>Seleccionar...</option>
                                 @foreach($vehiculos as $vehiculo)
-                                    <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
+                                <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
                                 @endforeach
                             </select>
                         </div>

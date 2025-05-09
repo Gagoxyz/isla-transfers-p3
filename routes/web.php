@@ -47,13 +47,18 @@ Route::get('/panel/customer', [CustomerController::class, 'panel'])
 
 /* Rutas de cliente particular */
 Route::post('panel/customer/booking/oneway', [CustomerController::class, 'storeOneWay'])->name('booking.oneWay'); // añade reserva ida
-Route::put('panel/customer/booking/update-one-way', [CustomerController::class, 'updateOneWay'])->name('booking.updateOneWay'); // actualiza reserva ida
-Route::delete('/booking/destroy/{id_reserva}', [CustomerController::class, 'destroyOneWay'])->name('booking.destroyOneWay'); // elimina reserva ida
+Route::put('panel/customer/booking/update-one-way', [CustomerController::class, 'updateOneWay'])->name('booking.updateOneWay'); // modifica reserva ida
+Route::delete('/booking/one-way/destroy/{id_reserva}', [CustomerController::class, 'destroyOneWay'])->name('booking.destroyOneWay'); // elimina reserva ida
 
 Route::post('panel/customer/booking/return', [CustomerController::class, 'storeReturn'])->name('booking.return'); // añade reserva vuelta
+Route::put('panel/customer/booking/update-return', [CustomerController::class, 'updateReturn'])->name('booking.updateReturn'); //modifica reserva vuelta
+Route::delete('/booking/return/destroy/{id_reserva}', [CustomerController::class, 'destroyReturn'])->name('booking.destroyReturn'); // elimina reserva vuelta
 
 Route::post('panel/customer/booking/roundtrip', [CustomerController::class, 'storeRoundTrip'])->name('booking.roundTrip'); // añade reserva ida-vuelta
-Route::get('/panel/customer', [CustomerController::class, 'showBookingsByEmail'])->name('customer.panel');
+Route::put('panel/customer/booking/update-round-trip', [CustomerController::class, 'updateRoundTrip'])->name('booking.updateRoundTrip'); //modifica reserva ida-vuelta
+Route::delete('/booking/round-trip/destroy/{id_reserva}', [CustomerController::class, 'destroyRoundTrip'])->name('booking.destroyRoundTrip'); // elimina reserva ida-vuelta
+
+Route::get('/panel/customer', [CustomerController::class, 'showBookingsByEmail'])->name('customer.panel'); // muestra las reservas filtradas por email
 
 Route::get('/panel/admin', function () {
     return view('panel.admin');

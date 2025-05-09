@@ -1,13 +1,13 @@
 @php
-    use Illuminate\Support\Str;
-    use App\Models\TransferHotel;
-    use App\Models\TransferVehiculo;
-    use App\Models\TransferViajero;
+use Illuminate\Support\Str;
+use App\Models\TransferHotel;
+use App\Models\TransferVehiculo;
+use App\Models\TransferViajero;
 
-    $newUUID = Str::upper(Str::random(7));
-    $emails = TransferViajero::pluck('email');
-    $hoteles = TransferHotel::all();
-    $vehiculos = TransferVehiculo::all();
+$newUUID = Str::upper(Str::random(7));
+$emails = TransferViajero::pluck('email');
+$hoteles = TransferHotel::all();
+$vehiculos = TransferVehiculo::all();
 @endphp
 
 <!-- Modal -->
@@ -24,50 +24,54 @@
                     <input type="hidden" name="uuid" value="{{ $newUUID }}">
                     <div class="row mb-3">
                         <div class="col-md-6">
+                            <label for="uuid" class="form-label">Localizador</label>
+                            <input type="text" value="{{ $newUUID }}" name="uuid" class="form-control" readonly>
+                        </div>
+                        <div class="col-md-6">
                             <label for="customerEmailSelect" class="form-label">Email del cliente</label>
                             <select class="form-select" name="customerEmailSelect" id="customerEmailSelect">
                                 <option selected>Seleccionar...</option>
                                 @foreach($emails as $email)
-                                    <option value="{{ $email }}">{{ $email }}</option>
+                                <option value="{{ $email }}">{{ $email }}</option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="dateFly" class="form-label">Día del vuelo</label>
                             <input type="date" name="dateFly" id="dateFly" class="form-control" required>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="timeFly" class="form-label">Hora del vuelo</label>
                             <input type="time" name="timeFly" id="timeFly" class="form-control" required>
                         </div>
+                    </div>
+                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="pickupTime" class="form-label">Hora de recogida</label>
                             <input type="time" name="pickupTime" id="pickupTime" class="form-control" required>
                         </div>
-                    </div>
-                    <div class="row mb-3">
                         <div class="col-md-6">
                             <label for="hotelSelect" class="form-label">Hotel de recogida</label>
                             <select class="form-select" name="hotelSelect" id="hotelSelect">
                                 <option selected>Seleccionar...</option>
                                 @foreach($hoteles as $hotel)
-                                    <option value="{{ $hotel->id_hotel }}">{{ $hotel->nombre_hotel }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label for="carSelect" class="form-label">Vehículo</label>
-                            <select class="form-select" name="carSelect" id="carSelect">
-                                <option selected>Seleccionar...</option>
-                                @foreach($vehiculos as $vehiculo)
-                                    <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
+                                <option value="{{ $hotel->id_hotel }}">{{ $hotel->nombre_hotel }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="carSelect" class="form-label">Vehículo</label>
+                            <select class="form-select" name="carSelect" id="carSelect">
+                                <option selected>Seleccionar...</option>
+                                @foreach($vehiculos as $vehiculo)
+                                <option value="{{ $vehiculo->id_vehiculo }}">{{ $vehiculo->descripcion }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                         <div class="col-md-6">
                             <label for="passengerNum" class="form-label">Número de pasajeros</label>
                             <input type="number" name="passengerNum" id="passengerNum" class="form-control" required min="1">

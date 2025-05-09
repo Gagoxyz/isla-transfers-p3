@@ -3,11 +3,11 @@ use Illuminate\Support\Str;
 $uuid = Str::random(7);
 @endphp
 
-<div class="modal fade" id="roundTripModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
+<div class="modal fade" id="roundTripModal" tabindex="-1" aria-labelledby="roundTripModal" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="customerModalLabel">Nueva reserva (Ida-Vuelta / Aeropuerto → Hotel)</h1>
+                <h1 class="modal-title fs-5">Nueva reserva (Ida-Vuelta / Aeropuerto → Hotel)</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
             </div>
             <div class="modal-body">
