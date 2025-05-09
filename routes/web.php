@@ -40,8 +40,48 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 /* Login */
 Route::get('/login', [LoginController::class, 'showForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-/* Paneles */
+// Ruta de bienvenida (para evitar error 404 al cerrar sesión o redirigir)
+Route::get('/', function () {
+    return view('welcome');
+})->name('welcome');
+
+// Ruta para el editar los diferentes perfiles
+Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
+Route::post('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
+
+
+// ADMINISTRADOR
+Route::get('/panel/admin', function () {
+    return view('panel.admin');
+})->name('admin.panel');
+
+//Rutas para el calendario 
+Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
+Route::get('/admin', function () {
+    return view('panel.admin');
+})->name('admin.panel');
+
+Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
+Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
+Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
+Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->name('admin.reserva.update');
+Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
+Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
+
+Route::get('/admin/gestion-hoteles', [AdminHotelController::class, 'index'])->name('admin.hoteles.index'); // panel gestion de hoteles
+Route::post('/admin/hotel', [AdminHotelController::class, 'store'])->name('admin.hotel.store'); // añade un hotel
+Route::put('/admin/hotel/{id}', [AdminHotelController::class, 'update'])->name('admin.hotel.update'); // modifica un hotel
+Route::delete('/admin/hotel/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotel.destroy'); // elimina un hotel
+
+Route::get('/admin/gestion-vehiculos', [AdminCarController::class, 'index'])->name('admin.vehiculos.index'); // panel gestion de vehiculos
+Route::post('/admin/vehiculo', [AdminCarController::class, 'store'])->name('admin.vehiculos.store'); // añade un vehiculo
+Route::put('/admin/vehiculo/{id}', [AdminCarController::class, 'update'])->name('admin.vehiculos.update'); // modifica un vehiculo
+Route::delete('/admin/vehiculo/{id}', [AdminCarController::class, 'destroy'])->name('admin.vehiculos.destroy'); // elimina un vehiculo
+
+
+// CLIENTE
 Route::get('/panel/customer', [CustomerController::class, 'panel'])
     ->middleware('viajero.auth')
     ->name('customer.panel');
@@ -61,50 +101,13 @@ Route::delete('/booking/round-trip/destroy/{id_reserva}', [CustomerController::c
 
 Route::get('/panel/customer', [CustomerController::class, 'showBookingsByEmail'])->name('customer.panel'); // muestra las reservas filtradas por email
 
-Route::get('/panel/admin', function () {
-    return view('panel.admin');
-})->name('admin.panel');
 
+
+// HOTEL
 Route::get('/panel/hotel', function () {
-    return view('panel.hotel');
+    return view('panel.hotel.corporative');
 })->name('corp.panel');
 
-Route::get('/login', [LoginController::class, 'showForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
-// Ruta de bienvenida (para evitar error 404 al cerrar sesión o redirigir)
-Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
-
-// Ruta para el editar los diferentes perfiles
-Route::get('/perfil/editar', [ProfileController::class, 'edit'])->name('profile.edit');
-Route::post('/perfil/editar', [ProfileController::class, 'update'])->name('profile.update');
-
-//Rutas para el calendario 
-Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
-Route::get('/admin', function () {
-    return view('panel.admin');
-})->name('admin.panel');
-
-
-Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
-Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
-Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
-Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->name('admin.reserva.update');
-Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
-Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
-
-Route::get('/admin/gestion-hoteles', [AdminHotelController::class, 'index'])->name('admin.hoteles.index'); // panel gestion de hoteles
-Route::post('/admin/hotel', [AdminHotelController::class, 'store'])->name('admin.hotel.store'); // añade un hotel
-Route::put('/admin/hotel/{id}', [AdminHotelController::class, 'update'])->name('admin.hotel.update'); // modifica un hotel
-Route::delete('/admin/hotel/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotel.destroy'); // elimina un hotel
-
-Route::get('/admin/gestion-vehiculos', [AdminCarController::class, 'index'])->name('admin.vehiculos.index'); // panel gestion de vehiculos
-Route::post('/admin/vehiculo', [AdminCarController::class, 'store'])->name('admin.vehiculos.store'); // añade un vehiculo
-Route::put('/admin/vehiculo/{id}', [AdminCarController::class, 'update'])->name('admin.vehiculos.update'); // modifica un vehiculo
-Route::delete('/admin/vehiculo/{id}', [AdminCarController::class, 'destroy'])->name('admin.vehiculos.destroy'); // elimina un vehiculo
 
 
 

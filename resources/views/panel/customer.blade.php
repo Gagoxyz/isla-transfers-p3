@@ -44,7 +44,7 @@
                 <i class="fa-solid fa-circle-plus"></i> Reservar ida-vuelta
             </button>
         </div>
-
+        <hr>
         <!-- Sección para vuelos de IDA -->
         <div class="mt-5">
             <!-- Aeropuerto-Hotel Table -->

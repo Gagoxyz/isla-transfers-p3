@@ -84,8 +84,6 @@
 @endsection
 
 @push('scripts')
-<!-- Bootstrap Bundle con Popper (necesario para modales) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 <script>
     document.querySelectorAll('.editHotelBtn').forEach(button => {
         button.addEventListener('click', () => {
