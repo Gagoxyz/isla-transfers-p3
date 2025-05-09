@@ -17,9 +17,10 @@ class TransferHotel extends Authenticatable
     // Columnas fillable (asignables masivamente)
     protected $fillable = [
         'nombre_hotel',
+        'id_zona',
+        'comision',
         'email_hotel',
         'password',
-        // faltan datos
     ];
 
     // Columnas ocultas en respuestas JSON
@@ -27,13 +28,8 @@ class TransferHotel extends Authenticatable
         'password',
     ];
 
-    // Método para estandarizar el campo email (opcional pero útil)
-    // public function getEmailAttribute()
-    // {
-    //     return $this->email_admin; // Permite usar Auth::user()->email
-    // }
-
-    // public function transferReserva() {
-    //     return $this->hasMany(TransferReserva::class);
-    // }
+    public function zona()
+    {
+        return $this->belongsTo(TransferZona::class, 'id_zona', 'id_zona');
+    }
 }

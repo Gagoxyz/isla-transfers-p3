@@ -7,7 +7,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReservaController;
-use App\Http\Controllers\HotelController;
+use App\Http\Controllers\Admin\AdminHotelController;
 
 
 /*
@@ -40,7 +40,7 @@ Route::post('/register', [RegisterController::class, 'register'])->name('registe
 Route::get('/login', [LoginController::class, 'showForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.submit');
 
-/* Paneles (puedes ajustar las vistas según las tengas disponibles) */
+/* Paneles */
 Route::get('/panel/customer', [CustomerController::class, 'panel'])
     ->middleware('viajero.auth')
     ->name('customer.panel');
@@ -95,14 +95,10 @@ Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->na
 Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
 Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
 
-Route::prefix('admin/hoteles')->middleware('is_admin')->group(function () {
-    Route::get('/', [HotelController::class, 'index'])->name('admin.hoteles.index');
-    Route::post('/', [HotelController::class, 'store'])->name('admin.hoteles.store');
-    Route::put('/{id}', [HotelController::class, 'update'])->name('admin.hoteles.update');
-    Route::delete('/{id}', [HotelController::class, 'destroy'])->name('admin.hoteles.destroy');
-});
-
-
+Route::get('/admin/gestion-hoteles', [AdminHotelController::class, 'index'])->name('admin.hoteles.index'); // panel gestion de hoteles
+Route::post('/admin/hotel', [AdminHotelController::class, 'store'])->name('admin.hotel.store'); // añade un hotel
+Route::put('/admin/hotel/{id}', [AdminHotelController::class, 'update'])->name('admin.hotel.update'); // modifica un hotel
+Route::delete('/admin/hotel/{id}', [AdminHotelController::class, 'destroy'])->name('admin.hotel.destroy'); // elimina un hotel
 
 
 
