@@ -90,12 +90,15 @@ Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->na
 Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
 Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
 
-Route::prefix('admin/hoteles')->middleware('is_admin')->group(function () {
-    Route::get('/', [HotelController::class, 'index'])->name('admin.hoteles.index');
-    Route::post('/', [HotelController::class, 'store'])->name('admin.hoteles.store');
-    Route::put('/{id}', [HotelController::class, 'update'])->name('admin.hoteles.update');
-    Route::delete('/{id}', [HotelController::class, 'destroy'])->name('admin.hoteles.destroy');
-});
+Route::get('/admin/hoteles', [HotelController::class, 'index'])->name('admin.hoteles.index');
+//Route::post('/admin/hoteles/store', [HotelController::class, 'store'])->name('admin.hoteles.store');
+//Route::post('/admin/hoteles/update', [HotelController::class, 'update'])->name('admin.hoteles.update');
+Route::delete('/admin/hotel/{id}', [HotelController::class, 'destroy'])->name('admin.hotel.destroy');
+Route::post('/admin/hotel', [HotelController::class, 'store'])->name('admin.hotel.store');
+Route::put('/admin/hotel/{id}', [HotelController::class, 'update'])->name('admin.hotel.update');
+
+
+
 
 
 
