@@ -2,39 +2,42 @@
 
 @section('title', 'Administración')
 @include('modals.edit_admin')
+
 @section('content')
-<div class="container py-3 mt-5">
-    <h1 class="pb-5 row justify-content-center">Panel de administración ADMIN</h1>
-    <div class="row justify-content-center">
-        <div class="col-auto">
-            <button type="button" class="btn text-white fw-bold" style="background-color: #007bff;"
-                data-bs-toggle="modal" data-bs-target="#oneWayAdminModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar Aeropuerto-Hotel
-            </button>
-            <button type="button" class="btn text-white fw-bold" style="background-color: #dc3545;"
-                data-bs-toggle="modal" data-bs-target="#returnAdminModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar Hotel-Aeropuerto
-            </button>
-            <button type="button" class="btn text-white fw-bold" style="background-color: #28a745;"
-                data-bs-toggle="modal" data-bs-target="#roundTripAdminModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar ida-vuelta (Aeropuerto-Hotel/Hotel-Aeropuerto)
-            </button>
-            <a href="{{ url('/admin/estadisticas-zonas') }}" target="_blank"
-            class="btn text-white fw-bold" style="background-color: #6c757d;">
-                <i class="fa-solid fa-chart-bar"></i> Ver estadísticas (JSON)
-            </a>
+<div class="container py-4 mt-4">
+    <h1 class="text-center fw-bold">Panel de administración</h1>
+    <p class="text-center text-muted fs-5 mb-4">Gestión avanzada de reservas</p>
 
+    <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+        <button class="btn btn-primary btn-lg shadow-sm"
+            data-bs-toggle="modal" data-bs-target="#oneWayAdminModal">
+            <i class="fa-solid fa-plane-arrival me-2"></i> Aeropuerto - Hotel
+        </button>
+        <button class="btn btn-danger btn-lg shadow-sm"
+            data-bs-toggle="modal" data-bs-target="#returnAdminModal">
+            <i class="fa-solid fa-plane-departure me-2"></i> Hotel - Aeropuerto
+        </button>
+        <button class="btn btn-success btn-lg shadow-sm"
+            data-bs-toggle="modal" data-bs-target="#roundTripAdminModal">
+            <i class="fa-solid fa-retweet me-2"></i> Ida y Vuelta
+        </button>
+        <a href="{{ url('/admin/estadisticas-zonas') }}" target="_blank"
+           class="btn btn-secondary btn-lg shadow-sm">
+            <i class="fa-solid fa-chart-bar me-2"></i> Ver estadísticas (JSON)
+        </a>
+    </div>
 
+    <div class="card shadow-lg mb-5" style="max-width: 1200px; margin: 0 auto;">
+        <div class="card-body p-4">
+            <div id="calendar" style="min-height: 600px;"></div>
         </div>
     </div>
-    <hr>
-    <div class="p-3" id='calendar' style="min-height: 600px; max-width: 1200px; margin: 0 auto;"></div>
 </div>
+
 <!-- Modales -->
 @include('modals.one_way_admin')
 @include('modals.return_admin')
 @include('modals.round_trip_admin')
-{{-- @include('modals.select_reservation_type') --}}
 @include('modals.edit_admin')
 @endsection
 
@@ -43,7 +46,7 @@
 <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css' rel='stylesheet' />
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/locales-all.global.min.js'></script>
-<!-- jQuery (requerido para los modales y selects dinámicos) -->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -67,68 +70,48 @@
             events: '/api/reservas',
             eventDisplay: 'list-item',
             eventDidMount: function(info) {
-                if (info.event.extendedProps && info.event.extendedProps.tooltip) {
+                if (info.event.extendedProps?.tooltip) {
                     info.el.setAttribute('title', info.event.extendedProps.tooltip);
                 }
             },
             dateClick: function(info) {
-                const date = new Date(info.dateStr);
-                const formattedDate = date.toISOString().split('T')[0];
+                const formattedDate = new Date(info.dateStr).toISOString().split('T')[0];
                 console.log('Fecha seleccionada:', formattedDate);
             },
             eventClick: function(info) {
-            // Extrae el ID numérico (antes del guión)
-            const rawId = info.event.id;
-            const reservaId = rawId.split('-')[0];
+                const reservaId = info.event.id.split('-')[0];
+                const tipoReserva = info.event.extendedProps.tipo_trayecto;
 
-            const tipoReserva = info.event.extendedProps.tipo_trayecto;
+                $('.campo-entrada').toggle(tipoReserva != 2);
+                $('.campo-salida').toggle(tipoReserva != 1);
 
-            // Mostrar/ocultar campos según el tipo
-            if (tipoReserva == 1) {
-                $('.campo-entrada').show();
-                $('.campo-salida').hide();
-            } else if (tipoReserva == 2) {
-                $('.campo-entrada').hide();
-                $('.campo-salida').show();
-            } else {
-                $('.campo-entrada').show();
-                $('.campo-salida').show();
+                fetch(`/admin/reserva/${reservaId}`)
+                    .then(response => response.json())
+                    .then(reserva => {
+                        $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                        $('#deleteReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                        $('#reservaId').val(reserva.id_reserva);
+                        $('#tipoReservaEdit').val(reserva.id_tipo_reserva);
+
+                        $('#uuidEdit').val(reserva.localizador ?? '');
+                        $('#customerEmailEdit').val(reserva.email_cliente ?? '');
+                        $('#passengerNumEdit').val(reserva.num_viajeros ?? '');
+                        $('#hotelSelectEdit').val(reserva.id_destino ?? '');
+                        $('#carSelectEdit').val(reserva.id_vehiculo ?? '');
+
+                        $('#bookingDateEdit').val(reserva.fecha_entrada?.substring(0, 10) ?? '');
+                        $('#bookingTimeEdit').val(reserva.hora_entrada?.substring(0, 5) ?? '');
+                        $('#flyNumerEdit').val(reserva.numero_vuelo_entrada ?? '');
+                        $('#originAirportEdit').val(reserva.origen_vuelo_entrada ?? '');
+
+                        $('#dateFlyEdit').val(reserva.fecha_vuelo_salida?.substring(0, 10) ?? '');
+                        $('#timeFlyEdit').val(reserva.hora_vuelo_salida?.substring(0, 5) ?? '');
+                        $('#pickupTimeEdit').val(reserva.hora_recogida_salida?.substring(0, 5) ?? '');
+
+                        $('#editModal').modal('show');
+                    });
             }
-
-            fetch(`/admin/reserva/${reservaId}`)
-            .then(response => response.json())
-            .then(reserva => {
-                $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
-                $('#deleteReservationForm').attr('action', `/admin/reserva/${reservaId}`);
-                $('#reservaId').val(reserva.id_reserva);
-                $('#tipoReservaEdit').val(reserva.id_tipo_reserva);
-
-                // Datos comunes
-                $('#uuidEdit').val(reserva.localizador ?? '');
-                $('#customerEmailEdit').val(reserva.email_cliente ?? '');
-                $('#passengerNumEdit').val(reserva.num_viajeros ?? '');
-                $('#hotelSelectEdit').val(reserva.id_destino ?? '');
-                $('#carSelectEdit').val(reserva.id_vehiculo ?? '');
-
-                // Entrada (Aeropuerto -> Hotel)
-                $('#bookingDateEdit').val(reserva.fecha_entrada ? reserva.fecha_entrada.substring(0, 10) : '');
-                $('#bookingTimeEdit').val(reserva.hora_entrada ? reserva.hora_entrada.substring(0, 5) : '');
-                $('#flyNumerEdit').val(reserva.numero_vuelo_entrada ?? '');
-                $('#originAirportEdit').val(reserva.origen_vuelo_entrada ?? '');
-
-                // Salida (Hotel -> Aeropuerto)
-                $('#dateFlyEdit').val(reserva.fecha_vuelo_salida ? reserva.fecha_vuelo_salida.substring(0, 10) : '');
-                $('#timeFlyEdit').val(reserva.hora_vuelo_salida ? reserva.hora_vuelo_salida.substring(0, 5) : '');
-                $('#pickupTimeEdit').val(reserva.hora_recogida_salida ? reserva.hora_recogida_salida.substring(0, 5) : '');
-
-                $('#editModal').modal('show');
-            });
-
-
-        }
-
-
-             });
+        });
 
         calendar.render();
     });

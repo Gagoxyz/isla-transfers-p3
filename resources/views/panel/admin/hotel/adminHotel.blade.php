@@ -3,69 +3,72 @@
 @section('title', 'Gestión hoteles')
 
 @section('content')
-<div class="container mt-5">
+<div class="container py-4 mt-4">
     @if(session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
     @endif
 
     @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
     @endif
 
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">
-            <i class="fa-solid fa-hotel me-2"></i>Lista de hoteles registrados
-        </h2>
-        <button type="button" class="btn btn-primary fw-bold shadow-sm d-flex align-items-center"
+    <h2 class="text-center fw-bold mb-2" style="color: #0056b3;">
+        <i class="fa-solid fa-hotel me-2"></i> Lista de hoteles registrados
+    </h2>
+    <p class="text-center text-muted fs-5 mb-4">Consulta y gestiona los hoteles</p>
+
+    <div class="d-flex justify-content-end mb-3">
+        <button type="button" class="btn fw-bold shadow-sm d-flex align-items-center"
+            style="background-color: #0056b3; color: white;"
             data-bs-toggle="modal" data-bs-target="#newHotelModal">
             <i class="fa-solid fa-square-h me-2"></i> Añadir hotel
         </button>
     </div>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="table-primary">
+                    <thead class="bg-light text-dark border-bottom">
                         <tr>
                             <th>Nombre del hotel</th>
                             <th>Zona del hotel</th>
                             <th>Comisión</th>
                             <th>Email</th>
-                            <th>Acciones</th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($hoteles as $hotel)
                         <tr>
-                            <td>{{ $hotel->nombre_hotel }}</td>
+                            <td class="fw-semibold">{{ $hotel->nombre_hotel }}</td>
                             <td>{{ optional($hotel->zona)->descripcion ?? 'Zona no asignada' }}</td>
                             <td>{{ $hotel->comision }}%</td>
                             <td>{{ $hotel->email_hotel }}</td>
-                            <td>
-                                <div class="d-flex gap-2">
-                                    <button type="button" class="btn btn-sm btn-warning editHotelBtn"
+                            <td class="text-center">
+                                <div class="d-flex justify-content-center gap-2">
+                                    <button type="button" class="btn btn-sm btn-outline-primary shadow-sm editHotelBtn"
+                                        title="Editar"
                                         data-id="{{ $hotel->id_hotel }}"
                                         data-nombre="{{ $hotel->nombre_hotel }}"
                                         data-comision="{{ $hotel->comision }}"
                                         data-email="{{ $hotel->email_hotel }}"
                                         data-zona="{{ $hotel->id_zona }}">
-                                        <i class="fa-solid fa-pen-to-square me-1"></i>Editar
+                                        <i class="fa-solid fa-pen-to-square"></i>
                                     </button>
 
                                     <form action="{{ route('admin.hotel.destroy', $hotel->id_hotel) }}" method="POST">
-
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-danger"
+                                        <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" title="Eliminar"
                                             onclick="return confirm('¿Eliminar este hotel?')">
-                                            <i class="fa-solid fa-trash me-1"></i>Eliminar
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </form>
                                 </div>
