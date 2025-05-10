@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\AdminReservaController;
 use App\Http\Controllers\Admin\AdminHotelController;
 use App\Http\Controllers\Admin\AdminCarController;
 use App\Http\Controllers\Hotel\HotelController;
+use App\Http\Controllers\Hotel\HotelComisionController;
 
 
 /*
@@ -114,6 +115,9 @@ Route::put('/hotel/reserva/editar/ida', [HotelController::class, 'updateOneWay']
 Route::put('/hotel/reserva/editar/vuelta', [HotelController::class, 'updateReturn'])->name('hotel.update.return');//edita reserva de vuelta
 Route::put('/hotel/reserva/editar/ida-vuelta', [HotelController::class, 'updateRoundTrip'])->name('hotel.update.roundtrip');//editar reserva ida-vuelta
 Route::delete('/hotel/reserva/eliminar/{id}', [HotelController::class, 'destroy'])->name('hotel.reserva.destroy');//eliminar las reservas
+
+Route::get('/hotel/comisiones', [HotelComisionController::class, 'verComisionesMensuales'])->name('hotel.comisiones'); //
+
 
 
 

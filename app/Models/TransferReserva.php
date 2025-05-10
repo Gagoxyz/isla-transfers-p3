@@ -45,11 +45,13 @@ class TransferReserva extends Model
         return $this->belongsTo(TransferHotel::class, 'id_destino', 'id_hotel');
     }
 
-    public function descripcionVehiculo(){
+    public function descripcionVehiculo()
+    {
         return $this->belongsTo(TransferVehiculo::class, 'id_vehiculo');
     }
 
-    public function realizadaPor(){
+    public function realizadaPor()
+    {
         return $this->belongsTo(TransferTipoReserva::class, 'id_tipo_reserva');
     }
 
@@ -58,5 +60,26 @@ class TransferReserva extends Model
         return $this->belongsTo(TransferVehiculo::class, 'id_vehiculo', 'id_vehiculo');
     }
 
-    
+    public function precioTransfer()
+    {
+        return TransferPrecio::where('id_hotel', $this->id_hotel)
+            ->where('id_vehiculo', $this->id_vehiculo)
+            ->first();
+    }
+
+    public function getPrecioAttribute()
+    {
+        return $this->precioTransfer()?->precio ?? 0;
+    }
+
+    public function getComisionHotelAttribute()
+    {
+        $comision = $this->hotel?->comision ?? 0;
+        return round(($this->precio * $comision) / 100, 2);
+    }
+
+    public function hotel()
+    {
+        return $this->belongsTo(TransferHotel::class, 'id_hotel', 'id_hotel');
+    }
 }

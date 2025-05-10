@@ -60,7 +60,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('customer.panel') }}">Panel de control</a></li>
                     @elseif (session('id_hotel'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('corp.panel') }}">Panel de control</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Lista de reservas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('hotel.comisiones') }}">Comisiones</a></li>
                     @else
                         <li class="nav-item"><a class="nav-link" href="{{ route('welcome') }}">Panel de control</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('register') }}">Registro</a></li>
