@@ -23,7 +23,6 @@ class TransferHotel extends Authenticatable
         'password',
     ];
 
-    // Columnas ocultas en respuestas JSON
     protected $hidden = [
         'password',
     ];
@@ -31,5 +30,10 @@ class TransferHotel extends Authenticatable
     public function zona()
     {
         return $this->belongsTo(TransferZona::class, 'id_zona', 'id_zona');
+    }
+
+    public function reservas()
+    {
+        return $this->hasMany(TransferReserva::class, 'id_hotel');
     }
 }

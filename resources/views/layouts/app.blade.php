@@ -56,6 +56,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.reservas.list') }}">Lista de reservas</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.hoteles.index') }}">Gestión de hoteles</a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('admin.vehiculos.index') }}">Gestión de vehículos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.comisiones') }}">Gestión de comisiones</a></li>
                     @elseif (session('id_viajero'))
                         <li class="nav-item"><a class="nav-link" href="{{ route('customer.panel') }}">Panel de control</a></li>
                     @elseif (session('id_hotel'))
