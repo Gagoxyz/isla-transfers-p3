@@ -5,6 +5,10 @@
 @include('modals.hotel.oneWayModal')
 @include('modals.hotel.returnModal')
 @include('modals.hotel.roundTripModal')
+@include('modals.hotel.editOneWayModal')
+@include('modals.hotel.editReturnModal')
+@include('modals.hotel.editRoundTripModal')
+
 
 @section('content')
 
@@ -72,14 +76,29 @@
                     <td>{{ $oneWayBooking->num_viajeros }}</td>
                     <td>{{ $oneWayBooking->descripcionVehiculo->descripcion }}</td>
                     <td class="d-flex flex-column gap-1">
-                        <button class="btn btn-warning btn-sm">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                    <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editOneWayModal"
+                            data-id="{{ $oneWayBooking->id_reserva}}"
+                            data-localizador="{{ $oneWayBooking->localizador }}"
+                            data-email="{{ $oneWayBooking->email_cliente }}"
+                            data-vuelo="{{ $oneWayBooking->numero_vuelo_entrada }}"
+                            data-fecha="{{ $oneWayBooking->fecha_entrada }}"
+                            data-hora="{{ $oneWayBooking->hora_entrada }}"
+                            data-origen="{{ $oneWayBooking->origen_vuelo_entrada }}"
+                            data-pasajeros="{{ $oneWayBooking->num_viajeros }}"
+                            data-vehiculo="{{ $oneWayBooking->id_vehiculo }}">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </button>
+
+                    <form method="POST" action="{{ route('hotel.reserva.destroy', $oneWayBooking->id_reserva) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('¿Eliminar esta reserva?')">
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </button>
-                        <form>
-                            <button class="btn btn-danger btn-sm" type="submit">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
-                        </form>
+                    </form>
+
                     </td>
                 </tr>
                 @endforeach
@@ -117,14 +136,26 @@
                     <td>{{ $returnBooking->num_viajeros }}</td>
                     <td>{{ $returnBooking->descripcionVehiculo->descripcion }}</td>
                     <td class="d-flex flex-column gap-1">
-                        <button class="btn btn-warning btn-sm">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                    <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editReturnModal"
+                            data-id="{{ $returnBooking->id_reserva }}"
+                            data-email="{{ $returnBooking->email_cliente }}"
+                            data-fecha="{{ $returnBooking->fecha_vuelo_salida }}"
+                            data-hora="{{ $returnBooking->hora_vuelo_salida }}"
+                            data-hora-recogida="{{ $returnBooking->hora_recogida_salida }}"
+                            data-pasajeros="{{ $returnBooking->num_viajeros }}"
+                            data-vehiculo="{{ $returnBooking->id_vehiculo }}">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </button>
+
+                    <form method="POST" action="{{ route('hotel.reserva.destroy', $returnBooking->id_reserva) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('¿Eliminar esta reserva de vuelta?')">
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </button>
-                        <form>
-                            <button class="btn btn-danger btn-sm" type="submit">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
-                        </form>
+                    </form>
                     </td>
                 </tr>
                 @endforeach
@@ -170,16 +201,29 @@
                     <td>{{ $roundTripBooking->num_viajeros }}</td>
                     <td>{{ $roundTripBooking->descripcionVehiculo->descripcion }}</td>
                     <td class="d-flex flex-column gap-1">
-                        <button class="btn btn-warning btn-sm">
-                            <i class="fa-solid fa-pen-to-square"></i> Editar
+                    <button class="btn btn-warning btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editRoundTripModal"
+                            data-id="{{ $roundTripBooking->id_reserva }}"
+                            data-email="{{ $roundTripBooking->email_cliente }}"
+                            data-vuelo="{{ $roundTripBooking->numero_vuelo_entrada }}"
+                            data-fecha-entrada="{{ $roundTripBooking->fecha_entrada }}"
+                            data-hora-entrada="{{ $roundTripBooking->hora_entrada }}"
+                            data-origen="{{ $roundTripBooking->origen_vuelo_entrada }}"
+                            data-fecha-salida="{{ $roundTripBooking->fecha_vuelo_salida }}"
+                            data-hora-salida="{{ $roundTripBooking->hora_vuelo_salida }}"
+                            data-hora-recogida="{{ $roundTripBooking->hora_recogida_salida }}"
+                            data-pasajeros="{{ $roundTripBooking->num_viajeros }}"
+                            data-vehiculo="{{ $roundTripBooking->id_vehiculo }}">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </button>
+                    <form method="POST" action="{{ route('hotel.reserva.destroy', $roundTripBooking->id_reserva) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('¿Eliminar esta reserva ida-vuelta?')">
+                            <i class="fa-solid fa-trash"></i> Eliminar
                         </button>
-                        <form>
-                            @csrf
-                            @method('DELETE')
-                            <button class="btn btn-danger btn-sm" type="submit">
-                                <i class="fa-solid fa-trash"></i> Eliminar
-                            </button>
-                        </form>
+                    </form>
                     </td>
                 </tr>
                 @endforeach
@@ -189,3 +233,74 @@
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+    //ida
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const modalElement = document.getElementById('editOneWayModal');
+        const modal = new bootstrap.Modal(modalElement);
+
+        document.querySelectorAll('[data-bs-target="#editOneWayModal"]').forEach(button => {
+            button.addEventListener('click', function () {
+                console.log("BOTÓN DETECTADO", {
+                    id: this.dataset.id,
+                    email: this.dataset.email,
+                    vuelo: this.dataset.vuelo,
+                });
+
+                document.getElementById('edit-id-oneway').value = this.dataset.id;
+                document.getElementById('edit-email-oneway').value = this.dataset.email;
+                document.getElementById('edit-vuelo-oneway').value = this.dataset.vuelo;
+                document.getElementById('edit-fecha-oneway').value = this.dataset.fecha;
+                document.getElementById('edit-hora-oneway').value = this.dataset.hora;
+                document.getElementById('edit-origen-oneway').value = this.dataset.origen;
+                document.getElementById('edit-pasajeros-oneway').value = this.dataset.pasajeros;
+                document.getElementById('edit-vehiculo-oneway').value = this.dataset.vehiculo;
+
+                modal.show();
+            });
+        });
+    });
+</script>
+<script>
+    //vuelta
+    document.querySelectorAll('[data-bs-target="#editReturnModal"]').forEach(button => {
+        button.addEventListener('click', function () {
+            console.log("Edit Return Modal:", this.dataset);
+
+            document.getElementById('edit-id-return').value = this.dataset.id;
+            document.getElementById('edit-email-return').value = this.dataset.email;
+            document.getElementById('edit-fecha-salida-return').value = this.dataset.fecha;
+            document.getElementById('edit-hora-salida-return').value = this.dataset.hora;
+            document.getElementById('edit-hora-recogida-return').value = this.dataset.horaRecogida;
+            document.getElementById('edit-pasajeros-return').value = this.dataset.pasajeros;
+            document.getElementById('edit-vehiculo-return').value = this.dataset.vehiculo;
+        });
+    });
+</script>
+
+<script>
+    //Ida y vuelta
+    document.querySelectorAll('[data-bs-target="#editRoundTripModal"]').forEach(button => {
+        button.addEventListener('click', function () {
+            console.log("Edit RoundTrip Modal:", this.dataset);
+
+            document.getElementById('edit-id-roundtrip').value = this.dataset.id;
+            document.getElementById('edit-email-roundtrip').value = this.dataset.email;
+            document.getElementById('edit-vuelo-roundtrip').value = this.dataset.vuelo;
+            document.getElementById('edit-fecha-entrada-roundtrip').value = this.dataset.fechaEntrada;
+            document.getElementById('edit-hora-entrada-roundtrip').value = this.dataset.horaEntrada;
+            document.getElementById('edit-origen-roundtrip').value = this.dataset.origen;
+            document.getElementById('edit-fecha-salida-roundtrip').value = this.dataset.fechaSalida;
+            document.getElementById('edit-hora-salida-roundtrip').value = this.dataset.horaSalida;
+            document.getElementById('edit-hora-recogida-roundtrip').value = this.dataset.horaRecogida;
+            document.getElementById('edit-pasajeros-roundtrip').value = this.dataset.pasajeros;
+            document.getElementById('edit-vehiculo-roundtrip').value = this.dataset.vehiculo;
+        });
+    });
+</script>
+
+
+@endpush
