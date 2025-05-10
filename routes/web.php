@@ -110,6 +110,10 @@ Route::get('/panel/hotel', [HotelController::class, 'index'])->name('corp.panel'
 Route::post('/hotel/reserva/oneway', [HotelController::class, 'storeOneWay'])->name('hotel.reserva.oneway'); // añade reserva ida
 Route::post('/hotel/reserva/return', [HotelController::class, 'storeReturn'])->name('hotel.reserva.return'); // añade reserva vuelta
 Route::post('/hotel/reserva/roundtrip', [HotelController::class, 'storeRoundTrip'])->name('hotel.reserva.roundtrip'); // añade reserva ida-vuelta
+Route::put('/hotel/reserva/editar/ida', [HotelController::class, 'updateOneWay'])->name('hotel.update.oneway');//edita reserva de ida
+Route::put('/hotel/reserva/editar/vuelta', [HotelController::class, 'updateReturn'])->name('hotel.update.return');//edita reserva de vuelta
+Route::put('/hotel/reserva/editar/ida-vuelta', [HotelController::class, 'updateRoundTrip'])->name('hotel.update.roundtrip');//editar reserva ida-vuelta
+Route::delete('/hotel/reserva/eliminar/{id}', [HotelController::class, 'destroy'])->name('hotel.reserva.destroy');//eliminar las reservas
 
 
 
