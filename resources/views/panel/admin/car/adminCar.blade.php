@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gestionar vehículos')
+@section('title', 'Gestión vehículos')
 
 @section('content')
 <div class="container mt-5">

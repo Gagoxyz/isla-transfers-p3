@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bienvenido')
+@section('title', 'Hotel - Administración')
 
 @include('modals.hotel.oneWayModal')
 @include('modals.hotel.returnModal')

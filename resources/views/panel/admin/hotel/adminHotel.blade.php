@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Gestionar hoteles')
+@section('title', 'Gestión hoteles')
 
 @section('content')
 <div class="container mt-5">

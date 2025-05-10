@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bienvenido')
+@section('title', 'Cliente - Reservas')
 
 @section('content')
 

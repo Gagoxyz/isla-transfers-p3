@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Bienvenido')
+@section('title', 'Administración')
 @include('modals.edit_admin')
 @section('content')
 <div class="container py-3 mt-5">
