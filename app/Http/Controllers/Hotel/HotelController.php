@@ -162,85 +162,82 @@ class HotelController extends Controller
         return redirect()->route('corp.panel')->with('success', 'Reserva de ida-vuelta registrada correctamente');
     }
 
-    public function updateOneWay(Request $request){   
+    public function updateOneWay(Request $request)
+    {
 
-      $reserva = TransferReserva::find($request->id);
+        $reserva = TransferReserva::find($request->id);
 
-    if (!$reserva) {
-        return redirect()->back()->with('error', 'Reserva no encontrada.');
+        if (!$reserva) {
+            return redirect()->back()->with('error', 'Reserva no encontrada.');
+        }
+
+        $reserva->update([
+            'email_cliente' => $request->email_cliente,
+            'numero_vuelo_entrada' => $request->numero_vuelo_entrada,
+            'fecha_entrada' => $request->fecha_entrada,
+            'hora_entrada' => $request->hora_entrada,
+            'origen_vuelo_entrada' => $request->origen_vuelo_entrada,
+            'num_viajeros' => $request->num_viajeros,
+            'id_vehiculo' => $request->id_vehiculo,
+        ]);
+
+        return redirect()->back()->with('success', 'Reserva actualizada correctamente.');
     }
 
-      $reserva->update([
-        'email_cliente' => $request->email_cliente,
-        'numero_vuelo_entrada' => $request->numero_vuelo_entrada,
-        'fecha_entrada' => $request->fecha_entrada,
-        'hora_entrada' => $request->hora_entrada,
-        'origen_vuelo_entrada' => $request->origen_vuelo_entrada,
-        'num_viajeros' => $request->num_viajeros,
-        'id_vehiculo' => $request->id_vehiculo,
-    ]);
+    public function updateReturn(Request $request)
+    {
+        $reserva = TransferReserva::find($request->id);
 
-    return redirect()->back()->with('success', 'Reserva actualizada correctamente.');
-}
+        if (!$reserva) {
+            return redirect()->back()->with('error', 'Reserva no encontrada.');
+        }
 
-public function updateReturn(Request $request)
-{
-    $reserva = TransferReserva::find($request->id);
+        $reserva->update([
+            'email_cliente' => $request->email_cliente,
+            'fecha_vuelo_salida' => $request->fecha_vuelo_salida,
+            'hora_vuelo_salida' => $request->hora_vuelo_salida,
+            'hora_recogida_salida' => $request->hora_recogida_salida,
+            'num_viajeros' => $request->num_viajeros,
+            'id_vehiculo' => $request->id_vehiculo,
+        ]);
 
-    if (!$reserva) {
-        return redirect()->back()->with('error', 'Reserva no encontrada.');
+        return redirect()->back()->with('success', 'Reserva de vuelta actualizada correctamente.');
     }
 
-    $reserva->update([
-        'email_cliente' => $request->email_cliente,
-        'fecha_vuelo_salida' => $request->fecha_vuelo_salida,
-        'hora_vuelo_salida' => $request->hora_vuelo_salida,
-        'hora_recogida_salida' => $request->hora_recogida_salida,
-        'num_viajeros' => $request->num_viajeros,
-        'id_vehiculo' => $request->id_vehiculo,
-    ]);
+    public function updateRoundTrip(Request $request)
+    {
+        $reserva = TransferReserva::find($request->id);
 
-    return redirect()->back()->with('success', 'Reserva de vuelta actualizada correctamente.');
-}
+        if (!$reserva) {
+            return redirect()->back()->with('error', 'Reserva no encontrada.');
+        }
 
-public function updateRoundTrip(Request $request)
-{
-    $reserva = TransferReserva::find($request->id);
+        $reserva->update([
+            'email_cliente' => $request->email_cliente,
+            'numero_vuelo_entrada' => $request->numero_vuelo_entrada,
+            'fecha_entrada' => $request->fecha_entrada,
+            'hora_entrada' => $request->hora_entrada,
+            'origen_vuelo_entrada' => $request->origen_vuelo_entrada,
+            'fecha_vuelo_salida' => $request->fecha_vuelo_salida,
+            'hora_vuelo_salida' => $request->hora_vuelo_salida,
+            'hora_recogida_salida' => $request->hora_recogida_salida,
+            'num_viajeros' => $request->num_viajeros,
+            'id_vehiculo' => $request->id_vehiculo,
+        ]);
 
-    if (!$reserva) {
-        return redirect()->back()->with('error', 'Reserva no encontrada.');
+        return redirect()->back()->with('success', 'Reserva ida-vuelta actualizada correctamente.');
     }
 
-    $reserva->update([
-        'email_cliente' => $request->email_cliente,
-        'numero_vuelo_entrada' => $request->numero_vuelo_entrada,
-        'fecha_entrada' => $request->fecha_entrada,
-        'hora_entrada' => $request->hora_entrada,
-        'origen_vuelo_entrada' => $request->origen_vuelo_entrada,
-        'fecha_vuelo_salida' => $request->fecha_vuelo_salida,
-        'hora_vuelo_salida' => $request->hora_vuelo_salida,
-        'hora_recogida_salida' => $request->hora_recogida_salida,
-        'num_viajeros' => $request->num_viajeros,
-        'id_vehiculo' => $request->id_vehiculo,
-    ]);
+    public function destroy($id)
+    {
+        $reserva = TransferReserva::find($id);
 
-    return redirect()->back()->with('success', 'Reserva ida-vuelta actualizada correctamente.');
-}
+        if (!$reserva) {
+            return redirect()->back()->with('error', 'Reserva no encontrada para eliminar.');
+        }
 
-public function destroy($id)
-{
-    $reserva = TransferReserva::find($id);
+        $reserva->delete();
 
-    if (!$reserva) {
-        return redirect()->back()->with('error', 'Reserva no encontrada para eliminar.');
+        return redirect()->back()->with('success', 'Reserva eliminada correctamente.');
     }
-
-    $reserva->delete();
-
-    return redirect()->back()->with('success', 'Reserva eliminada correctamente.');
-}
-
-
-
-
 }

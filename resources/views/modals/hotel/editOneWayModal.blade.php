@@ -12,7 +12,7 @@
         <div class="modal-body row g-3">
           <div class="col-md-6">
             <label>Email cliente</label>
-            <input type="email" class="form-control" name="email_cliente" id="edit-email-oneway" required>
+            <input type="email" class="form-control" name="email_cliente" id="edit-email-oneway" required readonly>
           </div>
           <div class="col-md-6">
             <label>Número de vuelo</label>
@@ -32,7 +32,7 @@
           </div>
           <div class="col-md-6">
             <label>Pasajeros</label>
-            <input type="number" class="form-control" name="num_viajeros" id="edit-pasajeros-oneway" required>
+            <input type="number" class="form-control" name="num_viajeros" id="edit-pasajeros-oneway" required min="1">
           </div>
           <div class="col-md-6">
             <label>Vehículo</label>

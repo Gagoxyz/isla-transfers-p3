@@ -12,7 +12,7 @@
         <div class="modal-body row g-3">
           <div class="col-md-6">
             <label>Email cliente</label>
-            <input type="email" class="form-control" name="email_cliente" id="edit-email-roundtrip" required>
+            <input type="email" class="form-control" name="email_cliente" id="edit-email-roundtrip" required readonly>
           </div>
 
           {{-- IDA --}}
@@ -51,7 +51,7 @@
 
           <div class="col-md-6">
             <label>Pasajeros</label>
-            <input type="number" class="form-control" name="num_viajeros" id="edit-pasajeros-roundtrip" required>
+            <input type="number" class="form-control" name="num_viajeros" id="edit-pasajeros-roundtrip" required min="1">
           </div>
           <div class="col-md-6">
             <label>Vehículo</label>
