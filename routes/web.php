@@ -13,6 +13,7 @@ use App\Http\Controllers\Hotel\HotelController;
 use App\Http\Controllers\Hotel\HotelComisionController;
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -119,7 +120,7 @@ Route::delete('/hotel/reserva/eliminar/{id}', [HotelController::class, 'destroy'
 Route::get('/hotel/comisiones', [HotelComisionController::class, 'verComisionesMensuales'])->name('hotel.comisiones'); //
 
 
-
+Route::get('/admin/estadisticas-zonas', [AdminReservaController::class, 'estadisticasPorZona']);//Ver JSON
 
 // Get para verificar conexión con BBDD de MySQL
 Route::get('/test-db', function () {

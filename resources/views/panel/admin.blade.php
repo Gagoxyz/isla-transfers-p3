@@ -19,6 +19,12 @@
                 data-bs-toggle="modal" data-bs-target="#roundTripAdminModal">
                 <i class="fa-solid fa-circle-plus"></i> Reservar ida-vuelta (Aeropuerto-Hotel/Hotel-Aeropuerto)
             </button>
+            <a href="{{ url('/admin/estadisticas-zonas') }}" target="_blank"
+            class="btn text-white fw-bold" style="background-color: #6c757d;">
+                <i class="fa-solid fa-chart-bar"></i> Ver estadísticas (JSON)
+            </a>
+
+
         </div>
     </div>
     <hr>

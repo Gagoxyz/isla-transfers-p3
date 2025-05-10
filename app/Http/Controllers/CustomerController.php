@@ -9,6 +9,7 @@ use App\Models\TransferVehiculo;
 use Illuminate\Support\Facades\Session;
 use DateTime;
 
+
 class CustomerController extends Controller
 {
     public function panel()
@@ -412,4 +413,6 @@ class CustomerController extends Controller
             return redirect()->back()->with('error', 'Error al eliminar la reserva: ' . $e->getMessage());
         }
     }
+
+
 }
