@@ -22,7 +22,7 @@
             <i class="fa-solid fa-retweet me-2"></i> Ida y Vuelta
         </button>
         <a href="{{ url('/admin/estadisticas-zonas') }}" target="_blank"
-           class="btn btn-secondary btn-lg shadow-sm">
+            class="btn btn-secondary btn-lg shadow-sm">
             <i class="fa-solid fa-chart-bar me-2"></i> Ver estadísticas (JSON)
         </a>
     </div>
@@ -50,7 +50,8 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    const BASE_URL = "{{ url('/') }}";
+    document.addEventListener('DOMContentLoaded', function() {
         const calendarEl = document.getElementById('calendar');
 
         const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -67,7 +68,7 @@
                 week: 'semana',
                 day: 'día'
             },
-            events: '/api/reservas',
+            events: `${BASE_URL}/api/reservas`,
             eventDisplay: 'list-item',
             eventDidMount: function(info) {
                 if (info.event.extendedProps?.tooltip) {
@@ -85,11 +86,11 @@
                 $('.campo-entrada').toggle(tipoReserva != 2);
                 $('.campo-salida').toggle(tipoReserva != 1);
 
-                fetch(`/admin/reserva/${reservaId}`)
+                fetch(`${BASE_URL}/admin/reserva/${reservaId}`)
                     .then(response => response.json())
                     .then(reserva => {
-                        $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
-                        $('#deleteReservationForm').attr('action', `/admin/reserva/${reservaId}`);
+                        $('#editReservationForm').attr('action', `${BASE_URL}/admin/reserva/${reservaId}`);
+                        $('#deleteReservationForm').attr('action', `${BASE_URL}/admin/reserva/${reservaId}`);
                         $('#reservaId').val(reserva.id_reserva);
                         console.log('Tipo de reserva cargado:', reserva.id_tipo_reserva);
                         $('#tipoReservaEdit').val(reserva.id_tipo_reserva);

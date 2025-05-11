@@ -88,11 +88,12 @@
 
 @push('scripts')
 <script>
+    const BASE_URL = "{{ url('/') }}";
     document.querySelectorAll('.editHotelBtn').forEach(button => {
         button.addEventListener('click', () => {
             const id = button.dataset.id;
             document.getElementById('editHotelId').value = id;
-            document.getElementById('editHotelForm').action = `/admin/hotel/${id}`;
+            document.getElementById('editHotelForm').action = `${BASE_URL}/admin/hotel/${id}`;
             document.getElementById('editHotelName').value = button.dataset.nombre;
             document.getElementById('editHotelCommission').value = button.dataset.comision;
             document.getElementById('editHotelEmail').value = button.dataset.email;

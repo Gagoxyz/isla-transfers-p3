@@ -81,11 +81,12 @@
 
 @push('scripts')
 <script>
+    const BASE_URL = "{{ url('/') }}";
     document.querySelectorAll('.editCarBtn').forEach(button => {
         button.addEventListener('click', () => {
             const id = button.dataset.id;
             document.getElementById('editCarId').value = id;
-            document.getElementById('editCarForm').action = `/admin/vehiculo/${id}`;
+            document.getElementById('editCarForm').action = `${BASE_URL}/admin/vehiculo/${id}`;
             document.getElementById('editCarDescription').value = button.dataset.descripcion;
             document.getElementById('editCarEmail').value = button.dataset.email_conductor;
             document.getElementById('editCarPassword').value = button.dataset.password;
