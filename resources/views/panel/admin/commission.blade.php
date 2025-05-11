@@ -3,46 +3,48 @@
 @section('title', 'Comisiones de Hoteles')
 
 @section('content')
-<div class="container mt-5">
-    <h2 class="fw-bold text-primary mb-4">
-        <i class="fa-solid fa-chart-column me-2"></i>Comisiones de hoteles - {{ $mes }}
+<div class="container py-4 mt-4">
+    <h2 class="text-center fw-bold mb-2" style="color: #0056b3;">
+        <i class="fa-solid fa-chart-column me-2"></i> Comisiones de hoteles - {{ $mes }}
     </h2>
+    <p class="text-center text-muted fs-5 mb-4">Resumen de comisiones generadas por reservas</p>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
+    <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-4">
             @if($hoteles->isEmpty())
             <div class="alert alert-info mb-0" role="alert">
-                No hay comisiones registradas este mes.
+                <i class="fa-solid fa-info-circle me-2"></i> No hay comisiones registradas este mes.
             </div>
             @else
             <div class="table-responsive">
-                <table class="table table-hover align-middle">
-                    <thead class="table-primary">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-dark border-bottom">
                         <tr>
                             <th>Hotel</th>
                             <th>Email</th>
                             <th>Zona</th>
-                            <th>Cantidad de reservas</th>
-                            <th>Comisión pactada (%)</th>
-                            <th>Total Comisión del Mes</th>
-                            <th>Listado reservas</th>
+                            <th>Reservas</th>
+                            <th>Comisión (%)</th>
+                            <th>Total Comisión</th>
+                            <th class="text-center">Reservas</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($hoteles as $hotel)
                         <tr>
-                            <td>{{ $hotel->nombre_hotel }}</td>
+                            <td class="fw-semibold">{{ $hotel->nombre_hotel }}</td>
                             <td>{{ $hotel->email_hotel }}</td>
-                            <td>{{ optional($hotel->zona)->descripcion }}</td>
+                            <td>{{ optional($hotel->zona)->descripcion ?? 'Sin zona' }}</td>
                             <td>{{ $hotel->reservas->count() }}</td>
                             <td>{{ $hotel->comision }}%</td>
                             <td class="fw-bold text-success">{{ number_format($hotel->comision_total, 2) }} €</td>
-                            <td>
+                            <td class="text-center">
                                 <button type="button"
-                                    class="btn btn-sm btn-success verReservasBtn"
+                                    class="btn btn-sm btn-outline-success shadow-sm verReservasBtn"
+                                    title="Ver reservas"
                                     data-nombre="{{ $hotel->nombre_hotel }}"
                                     data-reservas='@json($hotel->reservas_resumen)'>
-                                    Ver reservas
+                                    <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
                             </td>
                         </tr>
@@ -55,8 +57,7 @@
     </div>
 </div>
 
-
-<!-- Modal para mostrar listado de reservas por hotel -->
+<!-- Modal -->
 <div class="modal fade" id="reservasModal" tabindex="-1" aria-labelledby="reservasModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable">
         <div class="modal-content shadow-lg rounded-4">
@@ -73,7 +74,7 @@
                             <tr>
                                 <th>Localizador</th>
                                 <th>Cliente</th>
-                                <th>Fecha Reserva</th>
+                                <th>Fecha</th>
                                 <th>Vehículo</th>
                                 <th class="text-end">Precio</th>
                                 <th class="text-end">Comisión</th>
@@ -86,13 +87,14 @@
                 </div>
             </div>
             <div class="modal-footer justify-content-between">
-                <span class="text-muted small">Mostrando todas las reservas de este mes.</span>
+                <span class="text-muted small">Mostrando todas las reservas del mes actual.</span>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
 </div>
 
+@endsection
 
 @push('scripts')
 <script>
@@ -105,13 +107,13 @@
 
             reservas.forEach(r => {
                 const row = `<tr>
-                <td>${r.localizador}</td>
-                <td>${r.email_cliente}</td>
-                <td>${r.fecha_reserva}</td>
-                <td>${r.vehiculo}</td>
-                <td>${r.precio} €</td>
-                <td>${r.comision} €</td>
-            </tr>`;
+                    <td>${r.localizador}</td>
+                    <td>${r.email_cliente}</td>
+                    <td>${r.fecha_reserva}</td>
+                    <td>${r.vehiculo}</td>
+                    <td class="text-end">${parseFloat(r.precio).toFixed(2)} €</td>
+                    <td class="text-end">${parseFloat(r.comision).toFixed(2)} €</td>
+                </tr>`;
                 tbody.insertAdjacentHTML('beforeend', row);
             });
 
@@ -122,5 +124,3 @@
     });
 </script>
 @endpush
-
-@endsection

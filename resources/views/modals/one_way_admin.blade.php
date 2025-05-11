@@ -12,8 +12,8 @@
 
 <div class="modal fade" id="oneWayAdminModal" tabindex="-1" aria-labelledby="customerModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-success shadow rounded-4">
-            <div class="modal-header bg-success text-white rounded-top-4">
+        <div class="modal-content border-primary shadow rounded-4">
+            <div class="modal-header bg-primary text-white rounded-top-4">
                 <h5 class="modal-title" id="customerModalLabel">
                     <i class="fa-solid fa-circle-plus me-2"></i> Nueva reserva (Admin)
                 </h5>
@@ -111,7 +111,7 @@
                         <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">
                             <i class="fa-solid fa-xmark me-1"></i> Cancelar
                         </button>
-                        <button type="submit" class="btn btn-success text-white shadow-sm">
+                        <button type="submit" class="btn btn-primary text-white shadow-sm">
                             <i class="fa-solid fa-check me-1"></i> Registrar reserva
                         </button>
                     </div>

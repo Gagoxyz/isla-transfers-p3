@@ -57,19 +57,14 @@ Route::post('/perfil/editar', [ProfileController::class, 'update'])->name('profi
 
 
 // ADMINISTRADOR
-Route::get('/panel/admin', function () {
-    return view('panel.admin');
-})->name('admin.panel');
 
 //Rutas para el calendario 
-Route::get('/admin', function () {
-    return view('panel.admin');
-})->name('admin.panel');
+Route::get('/admin', [AdminReservaController::class, 'index'])->name('admin.panel');
 
 Route::post('/admin/reserva/oneway', [AdminReservaController::class, 'storeOneWay'])->name('admin.reserva.oneway');
 Route::post('/admin/reservas/return', [AdminReservaController::class, 'storeReturn'])->name('admin.reserva.return');
 Route::post('/admin/reserva/roundtrip', [AdminReservaController::class, 'storeRoundTrip'])->name('admin.reserva.roundtrip');
-Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show']);
+Route::get('/admin/reserva/{id}', [AdminReservaController::class, 'show'])->name('admin.reserva.show');
 Route::put('/admin/reserva/{id}', [AdminReservaController::class, 'update'])->name('admin.reserva.update');
 Route::delete('/admin/reserva/{id}', [AdminReservaController::class, 'destroy'])->name('admin.reserva.destroy');
 Route::get('/admin/lista-reservas', [AdminReservaController::class, 'list'])->name('admin.reservas.list');
@@ -86,6 +81,7 @@ Route::delete('/admin/vehiculo/{id}', [AdminCarController::class, 'destroy'])->n
 
 Route::get('/admin/comisiones', [AdminComisionController::class, 'verComisionesHoteles'])->name('admin.comisiones'); // muestra las comisiones del mes
 
+Route::get('/admin/estadisticas-zonas', [AdminReservaController::class, 'estadisticasPorZona']);//Ver JSON
 
 
 // CLIENTE
@@ -124,7 +120,6 @@ Route::delete('/hotel/reserva/eliminar/{id}', [HotelController::class, 'destroy'
 Route::get('/hotel/comisiones', [HotelComisionController::class, 'verComisionesMensuales'])->name('hotel.comisiones'); //
 
 
-Route::get('/admin/estadisticas-zonas', [AdminReservaController::class, 'estadisticasPorZona']);//Ver JSON
 
 // Get para verificar conexión con BBDD de MySQL
 Route::get('/test-db', function () {
