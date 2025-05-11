@@ -77,25 +77,30 @@
                             <td>{{ $booking->num_viajeros }}</td>
                             <td>{{ $booking->descripcionVehiculo->descripcion }}</td>
                             <td class="d-flex gap-2">
-                                <button class="btn btn-outline-warning btn-sm px-2 py-1" data-bs-toggle="modal" data-bs-target="#editOneWayModal"
-                                    data-id="{{ $booking->id_reserva }}"
-                                    data-email="{{ $booking->email_cliente }}"
-                                    data-vuelo="{{ $booking->numero_vuelo_entrada }}"
-                                    data-fecha="{{ $booking->fecha_entrada }}"
-                                    data-hora="{{ $booking->hora_entrada }}"
-                                    data-origen="{{ $booking->origen_vuelo_entrada }}"
-                                    data-pasajeros="{{ $booking->num_viajeros }}"
-                                    data-vehiculo="{{ $booking->id_vehiculo }}">
+                                <button class="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center px-2 py-1"
+                                        style="width: 32px; height: 32px;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editOneWayModal"
+                                        data-id="{{ $booking->id_reserva }}"
+                                        data-email="{{ $booking->email_cliente }}"
+                                        data-vuelo="{{ $booking->numero_vuelo_entrada }}"
+                                        data-fecha="{{ $booking->fecha_entrada }}"
+                                        data-hora="{{ $booking->hora_entrada }}"
+                                        data-origen="{{ $booking->origen_vuelo_entrada }}"
+                                        data-pasajeros="{{ $booking->num_viajeros }}"
+                                        data-vehiculo="{{ $booking->id_vehiculo }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                                 <form action="{{ route('hotel.reserva.destroy', $booking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Eliminar esta reserva?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-sm px-2 py-1" type="submit">
+                                    <button class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center px-2 py-1"
+                                            style="width: 32px; height: 32px;" type="submit">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -131,24 +136,29 @@
                             <td>{{ $booking->num_viajeros }}</td>
                             <td>{{ $booking->descripcionVehiculo->descripcion }}</td>
                             <td class="d-flex gap-2">
-                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editReturnModal"
-                                    data-id="{{ $booking->id_reserva }}"
-                                    data-email="{{ $booking->email_cliente }}"
-                                    data-fecha="{{ $booking->fecha_vuelo_salida }}"
-                                    data-hora="{{ $booking->hora_vuelo_salida }}"
-                                    data-hora-recogida="{{ $booking->hora_recogida_salida }}"
-                                    data-pasajeros="{{ $booking->num_viajeros }}"
-                                    data-vehiculo="{{ $booking->id_vehiculo }}">
+                                <button class="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center px-2 py-1"
+                                        style="width: 32px; height: 32px;"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#editReturnModal"
+                                        data-id="{{ $booking->id_reserva }}"
+                                        data-email="{{ $booking->email_cliente }}"
+                                        data-fecha="{{ $booking->fecha_vuelo_salida }}"
+                                        data-hora="{{ $booking->hora_vuelo_salida }}"
+                                        data-hora-recogida="{{ $booking->hora_recogida_salida }}"
+                                        data-pasajeros="{{ $booking->num_viajeros }}"
+                                        data-vehiculo="{{ $booking->id_vehiculo }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
                                 <form action="{{ route('hotel.reserva.destroy', $booking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Eliminar esta reserva?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-sm" type="submit">
+                                    <button class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center px-2 py-1"
+                                            style="width: 32px; height: 32px;" type="submit">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
+
                         </tr>
                         @endforeach
                     </tbody>
@@ -192,27 +202,27 @@
                             <td>{{ $booking->num_viajeros }}</td>
                             <td>{{ $booking->descripcionVehiculo->descripcion }}</td>
                             <td class="d-flex gap-2">
-                                <button class="btn btn-outline-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editRoundTripModal"
-                                    data-id="{{ $booking->id_reserva }}"
-                                    data-email="{{ $booking->email_cliente }}"
-                                    data-vuelo="{{ $booking->numero_vuelo_entrada }}"
-                                    data-fecha-entrada="{{ $booking->fecha_entrada }}"
-                                    data-hora-entrada="{{ $booking->hora_entrada }}"
-                                    data-origen="{{ $booking->origen_vuelo_entrada }}"
-                                    data-fecha-salida="{{ $booking->fecha_vuelo_salida }}"
-                                    data-hora-salida="{{ $booking->hora_vuelo_salida }}"
-                                    data-hora-recogida="{{ $booking->hora_recogida_salida }}"
-                                    data-pasajeros="{{ $booking->num_viajeros }}"
-                                    data-vehiculo="{{ $booking->id_vehiculo }}">
-                                    <i class="fa-solid fa-pen-to-square"></i>
+                            <button class="btn btn-outline-warning btn-sm d-flex align-items-center justify-content-center px-2 py-1" style="width: 32px; height: 32px;" data-bs-toggle="modal" data-bs-target="#editRoundTripModal"
+                                data-id="{{ $booking->id_reserva }}"
+                                data-email="{{ $booking->email_cliente }}"
+                                data-vuelo="{{ $booking->numero_vuelo_entrada }}"
+                                data-fecha-entrada="{{ $booking->fecha_entrada }}"
+                                data-hora-entrada="{{ $booking->hora_entrada }}"
+                                data-origen="{{ $booking->origen_vuelo_entrada }}"
+                                data-fecha-salida="{{ $booking->fecha_vuelo_salida }}"
+                                data-hora-salida="{{ $booking->hora_vuelo_salida }}"
+                                data-hora-recogida="{{ $booking->hora_recogida_salida }}"
+                                data-pasajeros="{{ $booking->num_viajeros }}"
+                                data-vehiculo="{{ $booking->id_vehiculo }}">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <form action="{{ route('hotel.reserva.destroy', $booking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Eliminar esta reserva?')">
+                                @csrf
+                                @method('DELETE')
+                                <button class="btn btn-outline-danger btn-sm d-flex align-items-center justify-content-center px-2 py-1" style="width: 32px; height: 32px;" type="submit">
+                                    <i class="fa-solid fa-trash"></i>
                                 </button>
-                                <form action="{{ route('hotel.reserva.destroy', $booking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Eliminar esta reserva?')">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-outline-danger btn-sm" type="submit">
-                                        <i class="fa-solid fa-trash"></i>
-                                    </button>
-                                </form>
+                            </form>
                             </td>
                         </tr>
                         @endforeach
