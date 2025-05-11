@@ -47,12 +47,12 @@
 
         <!-- TABLAS -->
         <div class="mt-5">
-            <h5 class="text-success mb-3">
+            <h5 class="text-primary mb-3">
                 <i class="fa-solid fa-plane-arrival me-2"></i> Reservas realizadas Aeropuerto-Hotel
             </h5>
             <div class="table-responsive">
                 <table class="table table-hover table-sm align-middle rounded shadow-sm">
-                    <thead class="table-success text-dark">
+                    <thead class="table-primary text-dark">
                         <tr>
                             <th>Realizada por</th>
                             <th>Localizador</th>
@@ -105,12 +105,12 @@
 
         <!-- Sección para vuelos de VUELTA -->
         <div class="mt-5">
-            <h5 class="text-success mb-3">
+            <h5 class="text-danger mb-3">
                 <i class="fa-solid fa-plane-departure me-2"></i> Reservas realizadas Hotel-Aeropuerto
             </h5>
             <div class="table-responsive">
                 <table class="table table-hover table-sm align-middle rounded shadow-sm">
-                    <thead class="table-success text-dark">
+                    <thead class="table-danger text-dark">
                         <tr>
                             <th>Realizada por</th>
                             <th>Localizador</th>

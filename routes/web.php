@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminReservaController;
 use App\Http\Controllers\Admin\AdminHotelController;
 use App\Http\Controllers\Admin\AdminCarController;
+use App\Http\Controllers\Admin\AdminComisionController;
 use App\Http\Controllers\Hotel\HotelController;
 use App\Http\Controllers\Hotel\HotelComisionController;
 
@@ -82,6 +83,8 @@ Route::get('/admin/gestion-vehiculos', [AdminCarController::class, 'index'])->na
 Route::post('/admin/vehiculo', [AdminCarController::class, 'store'])->name('admin.vehiculos.store'); // añade un vehiculo
 Route::put('/admin/vehiculo/{id}', [AdminCarController::class, 'update'])->name('admin.vehiculos.update'); // modifica un vehiculo
 Route::delete('/admin/vehiculo/{id}', [AdminCarController::class, 'destroy'])->name('admin.vehiculos.destroy'); // elimina un vehiculo
+
+Route::get('/admin/comisiones', [AdminComisionController::class, 'verComisionesHoteles'])->name('admin.comisiones'); // muestra las comisiones del mes
 
 
 // CLIENTE
