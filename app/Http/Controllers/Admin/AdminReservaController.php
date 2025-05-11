@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\DB;
 
 class AdminReservaController extends Controller
 {
+
+    public function index()
+    {
+        return view('panel.admin');
+    }
+
     //Añadir desde el panel admin una reserva de solo ida
     public function storeOneWay(Request $request)
     {
@@ -112,54 +118,54 @@ class AdminReservaController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    $reserva = \App\Models\TransferReserva::findOrFail($id);
+    {
+        $reserva = \App\Models\TransferReserva::findOrFail($id);
 
-    $request->validate([
-        'uuid' => 'required|string|max:255',
-        'customerEmailSelect' => 'required|email',
-        'hotelSelect' => 'nullable|integer',
-        'carSelect' => 'nullable|integer',
-        'passengerNum' => 'nullable|integer|min:1',
-    ]);
+        $request->validate([
+            'uuid' => 'required|string|max:255',
+            'customerEmailSelect' => 'required|email',
+            'hotelSelect' => 'nullable|integer',
+            'carSelect' => 'nullable|integer',
+            'passengerNum' => 'nullable|integer|min:1',
+        ]);
 
-    $data = [
-        'localizador' => $request->uuid,
-        'email_cliente' => $request->customerEmailSelect,
-        'id_destino' => $request->hotelSelect,
-        'id_vehiculo' => $request->carSelect,
-        'num_viajeros' => $request->passengerNum,
-        'fecha_modificacion' => now(),
-    ];
+        $data = [
+            'localizador' => $request->uuid,
+            'email_cliente' => $request->customerEmailSelect,
+            'id_destino' => $request->hotelSelect,
+            'id_vehiculo' => $request->carSelect,
+            'num_viajeros' => $request->passengerNum,
+            'fecha_modificacion' => now(),
+        ];
 
-    // Si hay datos de entrada (ida), los añadimos
-    if ($request->filled(['bookingDate', 'bookingTime', 'flyNumer', 'originAirport'])) {
-        $data['fecha_entrada'] = $request->bookingDate;
-        $data['hora_entrada'] = $request->bookingTime;
-        $data['numero_vuelo_entrada'] = $request->flyNumer;
-        $data['origen_vuelo_entrada'] = $request->originAirport;
-    } else {
-        $data['fecha_entrada'] = null;
-        $data['hora_entrada'] = null;
-        $data['numero_vuelo_entrada'] = null;
-        $data['origen_vuelo_entrada'] = null;
+        // Si hay datos de entrada (ida), los añadimos
+        if ($request->filled(['bookingDate', 'bookingTime', 'flyNumer', 'originAirport'])) {
+            $data['fecha_entrada'] = $request->bookingDate;
+            $data['hora_entrada'] = $request->bookingTime;
+            $data['numero_vuelo_entrada'] = $request->flyNumer;
+            $data['origen_vuelo_entrada'] = $request->originAirport;
+        } else {
+            $data['fecha_entrada'] = null;
+            $data['hora_entrada'] = null;
+            $data['numero_vuelo_entrada'] = null;
+            $data['origen_vuelo_entrada'] = null;
+        }
+
+        // Si hay datos de salida (vuelta), los añadimos
+        if ($request->filled(['dateFly', 'timeFly', 'pickupTime'])) {
+            $data['fecha_vuelo_salida'] = $request->dateFly;
+            $data['hora_vuelo_salida'] = $request->timeFly;
+            $data['hora_recogida_salida'] = $request->pickupTime;
+        } else {
+            $data['fecha_vuelo_salida'] = null;
+            $data['hora_vuelo_salida'] = null;
+            $data['hora_recogida_salida'] = null;
+        }
+
+        $reserva->update($data);
+
+        return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
     }
-
-    // Si hay datos de salida (vuelta), los añadimos
-    if ($request->filled(['dateFly', 'timeFly', 'pickupTime'])) {
-        $data['fecha_vuelo_salida'] = $request->dateFly;
-        $data['hora_vuelo_salida'] = $request->timeFly;
-        $data['hora_recogida_salida'] = $request->pickupTime;
-    } else {
-        $data['fecha_vuelo_salida'] = null;
-        $data['hora_vuelo_salida'] = null;
-        $data['hora_recogida_salida'] = null;
-    }
-
-    $reserva->update($data);
-
-    return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
-}
 
 
     public function destroy($id)
@@ -176,25 +182,24 @@ class AdminReservaController extends Controller
     }
 
     public function estadisticasPorZona()
-{
-    if (!session()->has('id_admin')) {
-        return response()->json(['error' => 'Acceso no autorizado.'], 403);
+    {
+        if (!session()->has('id_admin')) {
+            return response()->json(['error' => 'Acceso no autorizado.'], 403);
+        }
+
+        $total = DB::table('transfer_reservas')->count();
+
+        $estadisticas = DB::table('transfer_reservas')
+            ->join('transfer_hotel', 'transfer_reservas.id_destino', '=', 'transfer_hotel.id_hotel')
+            ->join('transfer_zona', 'transfer_hotel.id_zona', '=', 'transfer_zona.id_zona')
+            ->select('transfer_zona.descripcion', DB::raw('COUNT(*) as num_reservas'))
+            ->groupBy('transfer_zona.descripcion')
+            ->get()
+            ->map(function ($zona) use ($total) {
+                $zona->porcentaje = round(($zona->num_reservas / $total) * 100, 2);
+                return $zona;
+            });
+
+        return response()->json($estadisticas, 200, [], JSON_PRETTY_PRINT);
     }
-
-    $total = DB::table('transfer_reservas')->count();
-
-    $estadisticas = DB::table('transfer_reservas')
-        ->join('transfer_hotel', 'transfer_reservas.id_destino', '=', 'transfer_hotel.id_hotel')
-        ->join('transfer_zona', 'transfer_hotel.id_zona', '=', 'transfer_zona.id_zona')
-        ->select('transfer_zona.descripcion', DB::raw('COUNT(*) as num_reservas'))
-        ->groupBy('transfer_zona.descripcion')
-        ->get()
-        ->map(function ($zona) use ($total) {
-            $zona->porcentaje = round(($zona->num_reservas / $total) * 100, 2);
-            return $zona;
-        });
-
-return response()->json($estadisticas, 200, [], JSON_PRETTY_PRINT);
-
-}
 }
