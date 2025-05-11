@@ -20,6 +20,7 @@
                     <thead class="bg-light text-dark border-bottom">
                         <tr>
                             <th>Localizador</th>
+                            <th>Realizada por</th>
                             <th>Cliente</th>
                             <th>Fecha reserva</th>
                             <th>Última modificación</th>
@@ -35,6 +36,7 @@
                         @endphp
                         <tr>
                             <td class="fw-semibold text-uppercase">{{ $reserva->localizador }}</td>
+                            <td>{{ $reserva->realizadaPor->descripcion }}</td>
                             <td>{{ $reserva->email_cliente }}</td>
                             <td>{{ $reserva->fecha_reserva }}</td>
                             <td>
