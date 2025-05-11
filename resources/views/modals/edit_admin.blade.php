@@ -154,3 +154,25 @@ document.getElementById('deleteReservationBtn').addEventListener('click', functi
 });
 </script>
 @endpush
+
+@push('scripts')
+<script>
+document.getElementById('editReservationForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Evita que se recargue la página al enviar
+
+    console.log("Datos enviados:");
+    console.log({
+        tipoReserva: document.getElementById('tipoReservaEdit').value,
+        dateFly: document.getElementById('dateFlyEdit').value,
+        timeFly: document.getElementById('timeFlyEdit').value,
+        pickupTime: document.getElementById('pickupTimeEdit').value,
+        bookingDate: document.getElementById('bookingDateEdit').value,
+        bookingTime: document.getElementById('bookingTimeEdit').value
+    });
+
+    // Aquí puedes reactivar el envío manualmente si quieres continuar:
+    this.submit();
+});
+</script>
+@endpush
+

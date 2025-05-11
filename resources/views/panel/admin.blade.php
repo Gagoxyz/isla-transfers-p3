@@ -91,7 +91,9 @@
                         $('#editReservationForm').attr('action', `/admin/reserva/${reservaId}`);
                         $('#deleteReservationForm').attr('action', `/admin/reserva/${reservaId}`);
                         $('#reservaId').val(reserva.id_reserva);
+                        console.log('Tipo de reserva cargado:', reserva.id_tipo_reserva);
                         $('#tipoReservaEdit').val(reserva.id_tipo_reserva);
+
 
                         $('#uuidEdit').val(reserva.localizador ?? '');
                         $('#customerEmailEdit').val(reserva.email_cliente ?? '');

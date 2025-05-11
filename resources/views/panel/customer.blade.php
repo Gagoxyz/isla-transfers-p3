@@ -13,45 +13,46 @@
 
 <div class="container py-5">
     @if (session('success'))
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        {{ session('success') }}
+    <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-circle-check me-2"></i> {{ session('success') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
     @endif
 
     @if (session('error'))
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        {{ session('error') }}
+    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+        <i class="fa-solid fa-triangle-exclamation me-2"></i> {{ session('error') }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
     </div>
     @endif
-    <div class="glass-card">
-        <h1 class="text-center mb-5">Panel de administración de clientes</h1>
+    <div class="glass-card p-4 rounded shadow">
+        <h2 class="text-center fw-bold mb-4 text-success">
+            <i class="fa-solid fa-user me-2"></i> Panel de administración de clientes
+        </h2>
 
-        <div class="d-flex flex-wrap justify-content-center gap-3 mb-5">
-            <button type="button" class="btn btn-primary glass-btn"
-                data-bs-toggle="modal" data-bs-target="#oneWayModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar Aeropuerto-Hotel
+        <div class="d-flex flex-wrap justify-content-center gap-3 mb-4">
+            <button type="button" class="btn btn-outline-primary fw-bold shadow-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#oneWayModal">
+                <i class="fa-solid fa-circle-plus me-2"></i> Aeropuerto-Hotel
             </button>
 
-            <button type="button" class="btn btn-danger glass-btn"
-                data-bs-toggle="modal" data-bs-target="#returnModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar Hotel-Aeropuerto
+            <button type="button" class="btn btn-outline-danger fw-bold shadow-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#returnModal">
+                <i class="fa-solid fa-circle-plus me-2"></i> Hotel-Aeropuerto
             </button>
 
-            <button type="button" class="btn btn-success glass-btn"
-                data-bs-toggle="modal" data-bs-target="#roundTripModal">
-                <i class="fa-solid fa-circle-plus"></i> Reservar ida-vuelta
+            <button type="button" class="btn btn-outline-success fw-bold shadow-sm d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#roundTripModal">
+                <i class="fa-solid fa-circle-plus me-2"></i> Ida y vuelta
             </button>
         </div>
-        <hr>
-        <!-- Sección para vuelos de IDA -->
+        <hr class="text-success">
+
+        <!-- TABLAS -->
         <div class="mt-5">
-            <!-- Aeropuerto-Hotel Table -->
-            <h4>Reservas realizadas Aeropuerto-Hotel</h4>
-            <div class="table-responsive mt-3">
-                <table class="table table-hover table-sm align-middle">
-                    <thead class="table-dark">
+            <h5 class="text-success mb-3">
+                <i class="fa-solid fa-plane-arrival me-2"></i> Reservas realizadas Aeropuerto-Hotel
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle rounded shadow-sm">
+                    <thead class="table-success text-dark">
                         <tr>
                             <th>Realizada por</th>
                             <th>Localizador</th>
@@ -79,18 +80,19 @@
                             <td>{{ $oneWayBooking->origen_vuelo_entrada }}</td>
                             <td>{{ $oneWayBooking->num_viajeros }}</td>
                             <td>{{ $oneWayBooking->descripcionVehiculo->descripcion }}</td>
-                            <td class="d-flex flex-column gap-1">
-                                <button class="btn btn-warning btn-sm"
-                                    data-bs-toggle="modal"
+                            <td class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm px-2 py-1 action-icon-btn" 
+                                    data-bs-toggle="modal" 
                                     data-bs-target="#editOneWayModal"
                                     onclick='fillEditOneWayModal(@json($oneWayBooking))'>
-                                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <form action="{{ route('booking.destroyOneWay', $oneWayBooking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
+                                <form action="{{ route('booking.destroyOneWay', $oneWayBooking->id_reserva) }}" method="POST" 
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">
-                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    <button class="btn btn-outline-danger btn-sm px-2 py-1 action-icon-btn" type="submit">
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -103,11 +105,12 @@
 
         <!-- Sección para vuelos de VUELTA -->
         <div class="mt-5">
-            <!-- Aeropuerto-Hotel Table -->
-            <h4>Reservas realizadas Hotel-Aeropuerto</h4>
-            <div class="table-responsive mt-3">
-                <table class="table table-hover table-sm align-middle">
-                    <thead class="table-dark">
+            <h5 class="text-success mb-3">
+                <i class="fa-solid fa-plane-departure me-2"></i> Reservas realizadas Hotel-Aeropuerto
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle rounded shadow-sm">
+                    <thead class="table-success text-dark">
                         <tr>
                             <th>Realizada por</th>
                             <th>Localizador</th>
@@ -133,18 +136,20 @@
                             <td>{{ $returnBooking->hora_recogida_salida }}</td>
                             <td>{{ $returnBooking->num_viajeros }}</td>
                             <td>{{ $returnBooking->descripcionVehiculo->descripcion }}</td>
-                            <td class="d-flex flex-column gap-1">
-                                <button class="btn btn-warning btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editReturnModal"
-                                    onclick='fillEditReturnModal(@json($returnBooking))'>
-                                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                            <td class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm px-2 py-1 action-icon-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editReturnModal" 
+                                    onclick='fillEditReturnModal(@json($returnBooking))' 
+                                    title="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <form action="{{ route('booking.destroyReturn', $returnBooking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
+                                <form action="{{ route('booking.destroyReturn', $returnBooking->id_reserva) }}" method="POST" 
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">
-                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    <button class="btn btn-outline-danger btn-sm px-2 py-1 action-icon-btn" type="submit" title="Eliminar">
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -157,11 +162,12 @@
 
         <!-- Sección para vuelos de IDA-VUELTA -->
         <div class="mt-5">
-            <!-- Aeropuerto-Hotel Table -->
-            <h4>Reservas realizadas Ida-Vuelta (Aeropuerto-Hotel / Hotel-Aeropuerto)</h4>
-            <div class="table-responsive mt-3">
-                <table class="table table-hover table-sm align-middle">
-                    <thead class="table-dark">
+            <h5 class="text-success mb-3">
+                <i class="fa-solid fa-retweet me-2"></i> Reservas realizadas Ida-Vuelta
+            </h5>
+            <div class="table-responsive">
+                <table class="table table-hover table-sm align-middle rounded shadow-sm">
+                    <thead class="table-success text-dark">
                         <tr>
                             <th>Realizada por</th>
                             <th>Localizador</th>
@@ -195,18 +201,20 @@
                             <td>{{ $roundTripBooking->hora_recogida_salida }}</td>
                             <td>{{ $roundTripBooking->num_viajeros }}</td>
                             <td>{{ $roundTripBooking->descripcionVehiculo->descripcion }}</td>
-                            <td class="d-flex flex-column gap-1">
-                                <button class="btn btn-warning btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editRoundTripModal"
-                                    onclick='fillEditRoundTripModal(@json($roundTripBooking))'>
-                                    <i class="fa-solid fa-pen-to-square"></i> Editar
+                            <td class="d-flex gap-2">
+                                <button class="btn btn-outline-success btn-sm px-2 py-1 action-icon-btn" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#editRoundTripModal" 
+                                    onclick='fillEditRoundTripModal(@json($roundTripBooking))' 
+                                    title="Editar">
+                                    <i class="fa-solid fa-pen-to-square"></i>
                                 </button>
-                                <form action="{{ route('booking.destroyRoundTrip', $roundTripBooking->id_reserva) }}" method="POST" onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
+                                <form action="{{ route('booking.destroyRoundTrip', $roundTripBooking->id_reserva) }}" method="POST" 
+                                    onsubmit="return confirm('¿Estás seguro de que deseas eliminar esta reserva?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-danger btn-sm" type="submit">
-                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    <button class="btn btn-outline-danger btn-sm px-2 py-1 action-icon-btn" type="submit" title="Eliminar">
+                                        <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </form>
                             </td>
@@ -218,6 +226,7 @@
         </div>
     </div>
 </div>
+
 
 <script>
     function fillEditOneWayModal(booking) {

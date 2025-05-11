@@ -8,6 +8,7 @@ use App\Models\TransferHotel;
 use App\Models\TransferVehiculo;
 use Illuminate\Support\Facades\Session;
 use DateTime;
+use Illuminate\Support\Facades\DB;
 
 
 class CustomerController extends Controller
@@ -103,7 +104,13 @@ class CustomerController extends Controller
         $reserva = TransferReserva::find($request->id_reserva);
 
         try {
-            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->edit_fecha_entrada . ' ' . $request->edit_hora_entrada);
+            $entrada = DateTime::createFromFormat('Y-m-d H:i:s', $request->edit_fecha_entrada . ' ' . $request->edit_hora_entrada)
+         ?: DateTime::createFromFormat('Y-m-d H:i', $request->edit_fecha_entrada . ' ' . $request->edit_hora_entrada);
+
+            if (!$entrada) {
+                return redirect()->back()->with('error', 'Formato de fecha y hora no válido.');
+            }
+
             $ahora = new DateTime();
 
             $diff = $ahora->diff($entrada);
@@ -226,7 +233,12 @@ class CustomerController extends Controller
         $reserva = TransferReserva::find($request->id_reserva);
 
         try {
-            $salida = DateTime::createFromFormat('Y-m-d H:i', $request->editReturn_fecha_salida . ' ' . $request->editReturn_hora_salida);
+            $salida = DateTime::createFromFormat('Y-m-d H:i:s', $request->editReturn_fecha_salida . ' ' . $request->editReturn_hora_salida)
+            ?: DateTime::createFromFormat('Y-m-d H:i',  $request->editReturn_fecha_salida . ' ' . $request->editReturn_hora_salida);
+
+            if (!$salida) {
+                return redirect()->back()->with('error', 'Formato de fecha y hora no válido.');
+            }
             $ahora = new DateTime();
 
             $diff = $ahora->diff($salida);
@@ -360,7 +372,12 @@ class CustomerController extends Controller
         $reserva = TransferReserva::find($request->id_reserva);
 
         try {
-            $entrada = DateTime::createFromFormat('Y-m-d H:i', $request->editRoundTrip_fecha_entrada . ' ' . $request->editRoundTrip_hora_entrada);
+            $entrada = DateTime::createFromFormat('Y-m-d H:i:s', $request->editRoundTrip_fecha_entrada . ' ' . $request->editRoundTrip_hora_entrada)
+            ?: DateTime::createFromFormat('Y-m-d H:i',  $request->editRoundTrip_fecha_entrada . ' ' . $request->editRoundTrip_hora_entrada);
+
+            if (!$entrada) {
+                return redirect()->back()->with('error', 'Formato de fecha y hora no válido.');
+            }
             $ahora = new DateTime();
 
             $diff = $ahora->diff($entrada);
@@ -413,6 +430,4 @@ class CustomerController extends Controller
             return redirect()->back()->with('error', 'Error al eliminar la reserva: ' . $e->getMessage());
         }
     }
-
-
 }

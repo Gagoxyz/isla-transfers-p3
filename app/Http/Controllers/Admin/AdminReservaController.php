@@ -112,47 +112,54 @@ class AdminReservaController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $reserva = \App\Models\TransferReserva::findOrFail($id);
-        $tipo = $request->input('tipoReserva');
+{
+    $reserva = \App\Models\TransferReserva::findOrFail($id);
 
-        $request->validate([
-            'uuid' => 'required|string|max:255',
-            'customerEmailSelect' => 'required|email',
-            'hotelSelect' => 'nullable|integer',
-            'carSelect' => 'nullable|integer',
-            'passengerNum' => 'nullable|integer|min:1',
-        ]);
+    $request->validate([
+        'uuid' => 'required|string|max:255',
+        'customerEmailSelect' => 'required|email',
+        'hotelSelect' => 'nullable|integer',
+        'carSelect' => 'nullable|integer',
+        'passengerNum' => 'nullable|integer|min:1',
+    ]);
 
-        $data = [
-            'localizador' => $request->uuid,
-            'email_cliente' => $request->customerEmailSelect,
-            'id_destino' => $request->hotelSelect,
-            'id_vehiculo' => $request->carSelect,
-            'num_viajeros' => $request->passengerNum,
-        ];
+    $data = [
+        'localizador' => $request->uuid,
+        'email_cliente' => $request->customerEmailSelect,
+        'id_destino' => $request->hotelSelect,
+        'id_vehiculo' => $request->carSelect,
+        'num_viajeros' => $request->passengerNum,
+        'fecha_modificacion' => now(),
+    ];
 
-        if (($tipo == 1 || $tipo == 3) && $request->filled('bookingDate')) {
-            $data['fecha_entrada'] = $request->bookingDate;
-            $data['hora_entrada'] = $request->bookingTime;
-            $data['numero_vuelo_entrada'] = $request->flyNumer;
-            $data['origen_vuelo_entrada'] = $request->originAirport;
-        }
-
-
-        if ($tipo == 2 || $tipo == 3) {
-            $data['fecha_vuelo_salida'] = $request->dateFly;
-            $data['hora_vuelo_salida'] = $request->timeFly;
-            $data['hora_recogida_salida'] = $request->pickupTime;
-        }
-        $data['fecha_modificacion'] = now();
-        $reserva->update($data);
-
-
-        $reserva->update($data);
-
-        return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
+    // Si hay datos de entrada (ida), los añadimos
+    if ($request->filled(['bookingDate', 'bookingTime', 'flyNumer', 'originAirport'])) {
+        $data['fecha_entrada'] = $request->bookingDate;
+        $data['hora_entrada'] = $request->bookingTime;
+        $data['numero_vuelo_entrada'] = $request->flyNumer;
+        $data['origen_vuelo_entrada'] = $request->originAirport;
+    } else {
+        $data['fecha_entrada'] = null;
+        $data['hora_entrada'] = null;
+        $data['numero_vuelo_entrada'] = null;
+        $data['origen_vuelo_entrada'] = null;
     }
+
+    // Si hay datos de salida (vuelta), los añadimos
+    if ($request->filled(['dateFly', 'timeFly', 'pickupTime'])) {
+        $data['fecha_vuelo_salida'] = $request->dateFly;
+        $data['hora_vuelo_salida'] = $request->timeFly;
+        $data['hora_recogida_salida'] = $request->pickupTime;
+    } else {
+        $data['fecha_vuelo_salida'] = null;
+        $data['hora_vuelo_salida'] = null;
+        $data['hora_recogida_salida'] = null;
+    }
+
+    $reserva->update($data);
+
+    return redirect()->route('admin.panel')->with('success', 'Reserva actualizada correctamente.');
+}
 
 
     public function destroy($id)
@@ -187,7 +194,7 @@ class AdminReservaController extends Controller
             return $zona;
         });
 
-    return response()->json($estadisticas, 200, [], JSON_PRETTY_PRINT);
+return response()->json($estadisticas, 200, [], JSON_PRETTY_PRINT);
 
 }
 }
