@@ -1,82 +1,70 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Admin;
-use App\Models\Corporative;
-use GuzzleHttp\Promise\Coroutine;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
+use App\Models\TransferViajero;
+use App\Models\TransferAdmin;
+use App\Models\TransferHotel;
 
 class LoginController extends Controller
 {
-    // Mostramos el formulario de login
-    public function showLoginForm()
+    public function showForm()
     {
-        return view('login');
+        return view('auth.login');
     }
 
-    // Procesamos el login
-    public function logIn(Request $request)
+    public function login(Request $request)
     {
         $request->validate([
-            'inputEmail' => 'required|email', // Validación para un dato tipo "email"
-            'inputPassword' => 'required|min:4', // Mínimo de 4 caracteres
-            'user_type' => 'required|in:1,2,3', // Validación para tipo de usuario
+            'inputEmail' => 'required|email',
+            'inputPassword' => 'required|string',
+            'user_type' => 'required|in:1,2,3',
         ]);
 
-        // Obtener los datos del formulario
-        $email = $request->input('inputEmail');
-        $password = $request->input('inputPassword');
-        $user_type = $request->input('user_type');
+        $email = $request->inputEmail;
+        $password = $request->inputPassword;
+        $userType = $request->user_type;
 
-        switch ($user_type) {
-            case "1": // Cliente
-                $user = User::where('email', $email)->first();
-
-                if ($user && Hash::check($password, $user->password)){
-                    session_start();
-                    $_SESSION['email'] = $email;
-                    $_SESSION['id_viajero'] = $user->id;
-                    $_SESSION['rol'] = 'cliente';
-
-                    return redirect()->route('customerPanel');
-                } else {
-                    return redirect()->route('login')->with('error', 'Email o contraseña incorrectos');
+        switch ($userType) {
+            case "1": // Viajero
+                $user = TransferViajero::where('email', $email)->first();
+                if ($user && Hash::check($password, $user->password)) {
+                    Session::put('email', $user->email);
+                    Session::put('id_viajero', $user->id_viajero);
+                    Session::put('rol', 'cliente');
+                    return redirect()->route('customer.panel');
                 }
                 break;
 
-            case "2": // Hotel
-                $user = Corporative::where('email_hotel', $email)->first();
-
-                if ($user && Hash::check($password, $user->password)){
-                    session_start();
-                    $_SESSION['email'] = $email;
-                    $_SESSION['id_hotel'] = $user->id;
-                    $_SESSION['rol'] = 'corporativo';
-
-                    return redirect()->route('customerPanel');
-                } else {
-                    return redirect()->route('login')->with('error', 'Email o contraseña incorrectos');
+            case "2": // Corporativo
+                $user = TransferHotel::where('email_hotel', $email)->first();
+                if ($user && Hash::check($password, $user->password)) {
+                    Session::put('email', $user->email_hotel);
+                    Session::put('id_hotel', $user->id_hotel);
+                    Session::put('rol', 'hotel');
+                    return redirect()->route('corp.panel');
                 }
                 break;
 
             case "3": // Administrador
-                $user = Admin::where('email', $email)->first(); // Necesitaríamos un modelo Admin
+                $user = TransferAdmin::where('email_admin', $email)->first();
+                if ($user && Hash::check($password, $user->password)) {
+                    Session::put('email', $user->email_admin);
+                    Session::put('id_admin', $user->id_admin);
+                    Session::put('rol', 'admin');
+                    return redirect()->route('admin.panel');
+                }
                 break;
-
-            default:
-                return redirect()->route('login')->withErrors(['error' => 'Tipo de usuario no válido']);
         }
 
-        if ($user && Hash::check($password, $user->password)) {
-            // Iniciar sesión
-            session(['email' => $email, 'id_user' => $user->id, 'role' => $user_type]);
-            return redirect()->route('dashboard'); // Redirigir según el tipo de usuario
-        }
+        return back()->withErrors(['error' => 'Credenciales incorrectas']);
+    }
 
-        return redirect()->route('login')->withErrors(['error' => 'Email o contraseña incorrectos']);
+    public function logout()
+    {
+        Session::flush();
+        return redirect()->route('login');
     }
 }
